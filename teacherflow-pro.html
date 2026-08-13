@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeacherFlow Pro — Plan less. Teach better.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TEACHERFLOW PRO — DESIGN TOKENS
+   ========================================================= */
+:root{
+  --ivory:#F7F3EC;
+  --sage:#DDE6D8;
+  --olive:#65745B;
+  --olive-deep:#4E5A46;
+  --charcoal:#30352F;
+  --gray:#77766F;
+  --terracotta:#B97963;
+  --cream:#FFFDF8;
+
+  --bg:var(--ivory);
+  --surface:var(--cream);
+  --surface-2:#F1EDE4;
+  --band:var(--sage);
+  --text:var(--charcoal);
+  --muted:var(--gray);
+  --accent:var(--olive);
+  --accent-soft:rgba(101,116,91,.10);
+  --clay:var(--terracotta);
+  --clay-soft:rgba(185,121,99,.12);
+  --line:rgba(48,53,47,.12);
+  --line-soft:rgba(48,53,47,.07);
+  --shadow:0 1px 2px rgba(48,53,47,.05), 0 8px 24px -12px rgba(48,53,47,.18);
+  --shadow-lg:0 24px 60px -28px rgba(48,53,47,.42);
+  --r-sm:8px; --r:14px; --r-lg:20px;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sidebar-w:252px;
+}
+[data-theme="dark"]{
+  --bg:#1E221C;
+  --surface:#262B23;
+  --surface-2:#2E3429;
+  --band:#333A2E;
+  --text:#EDEAE0;
+  --muted:#A3A79A;
+  --accent:#9DB08E;
+  --accent-soft:rgba(157,176,142,.14);
+  --clay:#D2937C;
+  --clay-soft:rgba(210,147,124,.16);
+  --line:rgba(237,234,224,.14);
+  --line-soft:rgba(237,234,224,.08);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  --shadow-lg:0 24px 60px -28px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--serif); font-weight:500; letter-spacing:-.01em; margin:0}
+button,input,select,textarea{font-family:inherit; font-size:inherit; color:inherit}
+a{color:var(--accent)}
+::selection{background:var(--accent-soft)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+
+/* =========================================================
+   APP SHELL + SIDEBAR
+   ========================================================= */
+.app{display:flex; min-height:100vh}
+
+.sidebar{
+  width:var(--sidebar-w); flex:0 0 var(--sidebar-w);
+  background:var(--surface); border-right:1px solid var(--line);
+  padding:22px 14px; position:fixed; inset:0 auto 0 0; height:100vh;
+  display:flex; flex-direction:column; gap:18px; z-index:60;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+}
+.brand{display:flex; align-items:center; gap:11px; padding:0 8px 2px}
+.brand-mark{
+  width:38px; height:38px; border-radius:11px; flex:0 0 38px;
+  background:var(--accent); color:var(--cream);
+  display:grid; place-items:center; font-family:var(--serif); font-size:19px;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.12);
+}
+.brand-name{font-family:var(--serif); font-size:18px; line-height:1.15; display:block}
+.brand-tag{font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+
+.searchbox{position:relative; padding:0 6px}
+.searchbox input{
+  width:100%; padding:9px 12px 9px 32px; border-radius:10px;
+  border:1px solid var(--line); background:var(--surface-2); color:var(--text);
+}
+.searchbox input::placeholder{color:var(--muted)}
+.searchbox svg{position:absolute; left:16px; top:50%; transform:translateY(-50%); opacity:.5}
+
+.nav{display:flex; flex-direction:column; gap:1px; overflow-y:auto; flex:1; margin:0 -4px; padding:0 4px}
+.nav::-webkit-scrollbar{width:6px}
+.nav::-webkit-scrollbar-thumb{background:var(--line); border-radius:3px}
+.nav-item{
+  display:flex; align-items:center; gap:11px; width:100%;
+  padding:9px 11px; border-radius:10px; border:0; background:transparent;
+  color:var(--muted); cursor:pointer; text-align:left; font-size:14px; font-weight:500;
+  transition:background .16s, color .16s;
+}
+.nav-item:hover{background:var(--accent-soft); color:var(--text)}
+.nav-item.active{background:var(--accent); color:var(--cream)}
+.nav-item.active svg{opacity:1}
+.nav-item svg{width:17px; height:17px; flex:0 0 17px; opacity:.75}
+.nav-foot{border-top:1px solid var(--line-soft); padding:12px 8px 0; display:flex; align-items:center; justify-content:space-between; gap:8px}
+.who{min-width:0}
+.who b{display:block; font-weight:600; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.who span{font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block}
+.icon-btn{
+  width:34px; height:34px; flex:0 0 34px; border-radius:10px; border:1px solid var(--line);
+  background:var(--surface-2); display:grid; place-items:center; cursor:pointer; color:var(--text);
+  transition:background .16s, transform .16s;
+}
+.icon-btn:hover{background:var(--accent-soft)}
+.icon-btn:active{transform:scale(.94)}
+
+/* Topbar (mobile) */
+.topbar{
+  display:none; position:sticky; top:0; z-index:50; align-items:center; gap:12px;
+  padding:12px 16px; background:var(--surface); border-bottom:1px solid var(--line);
+}
+.scrim{display:none; position:fixed; inset:0; background:rgba(30,34,28,.42); z-index:55; backdrop-filter:blur(2px)}
+.scrim.show{display:block}
+
+.main{margin-left:var(--sidebar-w); flex:1; min-width:0; padding:34px 38px 90px}
+.view{display:none; animation:rise .3s cubic-bezier(.2,.7,.3,1)}
+.view.active{display:block}
+@keyframes rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* =========================================================
+   COMMON PIECES
+   ========================================================= */
+.page-head{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:24px}
+.eyebrow{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:7px}
+.page-head h1{font-size:31px}
+.page-head p{margin:6px 0 0; color:var(--muted); font-size:14px}
+.head-actions{display:flex; gap:9px; flex-wrap:wrap}
+
+.btn{
+  display:inline-flex; align-items:center; gap:7px; padding:9px 15px; border-radius:10px;
+  border:1px solid var(--line); background:var(--surface); color:var(--text);
+  font-size:13.5px; font-weight:600; cursor:pointer;
+  transition:background .16s, border-color .16s, transform .12s, box-shadow .16s;
+}
+.btn:hover{background:var(--surface-2); box-shadow:var(--shadow)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:15px; height:15px}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--cream)}
+.btn.primary:hover{background:var(--olive-deep); border-color:var(--olive-deep)}
+[data-theme="dark"] .btn.primary{color:#1E221C}
+.btn.clay{background:var(--clay); border-color:var(--clay); color:#fff}
+.btn.clay:hover{filter:brightness(.94)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--clay); border-color:var(--clay-soft)}
+.btn.sm{padding:6px 11px; font-size:12.5px; border-radius:9px}
+.btn.tiny{padding:4px 9px; font-size:12px; border-radius:8px}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; box-shadow:var(--shadow)}
+.card + .card{margin-top:18px}
+.card-head{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:16px; flex-wrap:wrap}
+.card-head h2{font-size:19px}
+.card-head h3{font-size:16.5px}
+.sub{color:var(--muted); font-size:13px}
+.grid{display:grid; gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.split{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:18px; align-items:start}
+
+.chip{
+  display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px;
+  font-size:11.5px; font-weight:600; background:var(--accent-soft); color:var(--accent);
+  border:1px solid transparent; white-space:nowrap;
+}
+.chip.clay{background:var(--clay-soft); color:var(--clay)}
+.chip.plain{background:var(--surface-2); color:var(--muted)}
+.dot{width:8px; height:8px; border-radius:50%; flex:0 0 8px; display:inline-block}
+
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px}
+.field label{font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--muted)}
+.field .hint{font-size:12px; color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0}
+input[type=text],input[type=date],input[type=time],input[type=number],input[type=email],input[type=url],select,textarea{
+  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--text); transition:border-color .16s, background .16s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent); background:var(--surface); outline:none}
+textarea{resize:vertical; min-height:82px; line-height:1.55}
+select{appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 18px) 52%, calc(100% - 13px) 52%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.toolbar{display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-bottom:16px}
+.toolbar select,.toolbar input{width:auto; min-width:150px; padding:8px 12px; font-size:13.5px}
+.toolbar select{padding-right:32px}
+
+.seg{display:inline-flex; background:var(--surface-2); border:1px solid var(--line); border-radius:11px; padding:3px; gap:2px}
+.seg button{border:0; background:transparent; padding:6px 13px; border-radius:8px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; transition:.16s}
+.seg button.on{background:var(--surface); color:var(--text); box-shadow:var(--shadow)}
+
+table{width:100%; border-collapse:collapse; font-size:14px}
+th{text-align:left; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; padding:0 12px 10px; white-space:nowrap}
+td{padding:12px; border-top:1px solid var(--line-soft); vertical-align:middle}
+tbody tr{transition:background .16s}
+tbody tr:hover{background:var(--accent-soft)}
+.table-wrap{overflow-x:auto; margin:0 -6px; padding:0 6px}
+.num{font-variant-numeric:tabular-nums}
+.right{text-align:right}
+.rowacts{display:flex; gap:6px; justify-content:flex-end}
+
+.empty{text-align:center; padding:46px 22px}
+.empty-mark{width:56px; height:56px; margin:0 auto 16px; border-radius:17px; background:var(--band); color:var(--accent); display:grid; place-items:center}
+.empty-mark svg{width:25px; height:25px}
+.empty h3{font-size:18px; margin-bottom:6px}
+.empty p{color:var(--muted); font-size:13.5px; max-width:320px; margin:0 auto 18px}
+
+.progress{height:7px; border-radius:99px; background:var(--surface-2); overflow:hidden}
+.progress span{display:block; height:100%; background:var(--accent); border-radius:99px; transition:width .4s cubic-bezier(.2,.7,.3,1)}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+.hero{
+  background:var(--band); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:28px 30px; margin-bottom:20px; position:relative; overflow:hidden;
+}
+.hero h1{font-size:32px; margin-bottom:6px}
+.hero .date{font-size:13px; color:var(--olive-deep); letter-spacing:.05em; text-transform:uppercase; font-weight:600}
+[data-theme="dark"] .hero .date{color:var(--accent)}
+.hero .motto{margin-top:14px; font-family:var(--serif); font-style:italic; font-size:16px; color:var(--muted)}
+.hero-rule{position:absolute; right:-40px; top:-40px; width:190px; height:190px; border-radius:50%; border:1px solid var(--line); opacity:.6}
+.hero-rule.two{right:10px; top:-90px; width:150px; height:150px}
+
+.stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; box-shadow:var(--shadow)}
+.stat .top{display:flex; align-items:center; justify-content:space-between; margin-bottom:11px}
+.stat .label{font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:600}
+.stat .ico{width:32px; height:32px; border-radius:10px; background:var(--accent-soft); color:var(--accent); display:grid; place-items:center}
+.stat .ico svg{width:16px; height:16px}
+.stat .big{font-family:var(--serif); font-size:32px; line-height:1}
+.stat .foot{font-size:12.5px; color:var(--muted); margin-top:7px}
+
+/* Signature: the day rail */
+.rail{position:relative; padding-left:76px}
+.rail::before{content:''; position:absolute; left:60px; top:6px; bottom:6px; width:1px; background:var(--line)}
+.rail-item{position:relative; padding:13px 0}
+.rail-item + .rail-item{border-top:1px solid var(--line-soft)}
+.rail-time{position:absolute; left:-76px; top:15px; width:56px; text-align:right; font-size:12.5px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums}
+.rail-time small{display:block; font-weight:400; font-size:11px; opacity:.75}
+.rail-item::after{content:''; position:absolute; left:-19px; top:20px; width:9px; height:9px; border-radius:50%; background:var(--surface); border:2px solid var(--accent)}
+.rail-item.now::after{background:var(--clay); border-color:var(--clay); box-shadow:0 0 0 4px var(--clay-soft)}
+.rail-row{display:flex; align-items:flex-start; justify-content:space-between; gap:14px}
+.rail-title{font-weight:600; font-size:15px}
+.rail-meta{font-size:12.5px; color:var(--muted); margin-top:3px}
+.rail-lesson{font-size:13px; margin-top:6px; color:var(--text); display:flex; align-items:center; gap:7px}
+
+.check{display:flex; align-items:flex-start; gap:11px; padding:10px 0; border-top:1px solid var(--line-soft)}
+.check:first-child{border-top:0}
+.check input{margin-top:2px; width:17px; height:17px; accent-color:var(--olive); flex:0 0 17px; cursor:pointer}
+.check .t{flex:1; min-width:0; font-size:14px}
+.check .m{font-size:12px; color:var(--muted); margin-top:2px; display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.check.done .t{text-decoration:line-through; color:var(--muted)}
+.quickadd{display:flex; gap:8px; margin-top:14px}
+.quickadd input{flex:1}
+
+.week{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px}
+.day{background:var(--surface-2); border:1px solid var(--line-soft); border-radius:var(--r); padding:13px; min-height:118px}
+.day.today{border-color:var(--accent); background:var(--accent-soft)}
+.day h4{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:9px; font-family:var(--sans); font-weight:600}
+.day .li{font-size:12.5px; padding:4px 0; border-top:1px solid var(--line-soft); display:flex; gap:6px; align-items:center}
+.day .li:first-of-type{border-top:0}
+
+.list-line{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:12px 0; border-top:1px solid var(--line-soft)}
+.list-line:first-child{border-top:0}
+.ll-t{font-weight:600; font-size:14px}
+.ll-m{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+.cal-grid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px}
+.cal-dow{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; text-align:center; padding-bottom:6px}
+.cal-cell{
+  min-height:104px; border:1px solid var(--line-soft); border-radius:12px; background:var(--surface-2);
+  padding:8px; cursor:pointer; transition:border-color .16s, background .16s; overflow:hidden;
+}
+.cal-cell:hover{border-color:var(--accent)}
+.cal-cell.out{opacity:.42}
+.cal-cell.today{border-color:var(--accent); background:var(--accent-soft)}
+.cal-cell .d{font-size:12.5px; font-weight:600; margin-bottom:6px; font-variant-numeric:tabular-nums}
+.ev{
+  font-size:11.5px; padding:3px 7px; border-radius:7px; margin-bottom:3px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer;
+  border-left:3px solid var(--accent); background:var(--accent-soft); color:var(--text);
+}
+.ev.lesson{border-color:#65745B; background:rgba(101,116,91,.12)}
+.ev.assignment{border-color:#B97963; background:rgba(185,121,99,.13)}
+.ev.meeting{border-color:#7E8FA6; background:rgba(126,143,166,.15)}
+.ev.personal{border-color:#A98BA6; background:rgba(169,139,166,.15)}
+.ev.deadline{border-color:#C25B4E; background:rgba(194,91,78,.14)}
+.ev.other{border-color:#8C8C82; background:rgba(140,140,130,.14)}
+.cal-week{display:grid; grid-template-columns:64px repeat(7,minmax(0,1fr)); gap:5px}
+.cal-day-list{display:flex; flex-direction:column; gap:9px}
+.slot{font-size:11px; color:var(--muted); text-align:right; padding-top:2px; font-variant-numeric:tabular-nums}
+.slot-cell{min-height:42px; border-top:1px solid var(--line-soft); padding:2px}
+
+/* =========================================================
+   LESSON PLANNER / MISC
+   ========================================================= */
+.lesson-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px}
+.mat{display:flex; align-items:center; gap:10px; padding:7px 0; border-top:1px solid var(--line-soft)}
+.mat:first-child{border-top:0}
+.mat input[type=checkbox]{width:16px; height:16px; accent-color:var(--olive); cursor:pointer}
+.mat .x{margin-left:auto; cursor:pointer; color:var(--muted); background:0; border:0; padding:2px 6px; border-radius:6px}
+.mat .x:hover{color:var(--clay); background:var(--clay-soft)}
+
+.tile{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px;
+  box-shadow:var(--shadow); position:relative; transition:transform .18s, box-shadow .18s, border-color .18s;
+}
+.tile:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--line)}
+.tile h3{font-size:17px; margin-bottom:4px}
+.tile .band{position:absolute; left:0; top:16px; bottom:16px; width:3px; border-radius:0 3px 3px 0; background:var(--accent)}
+.tile-meta{font-size:12.5px; color:var(--muted); display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
+.tile-foot{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid var(--line-soft)}
+.mini-stats{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px}
+.mini-stats div{font-size:12.5px; color:var(--muted)}
+.mini-stats b{display:block; font-family:var(--serif); font-size:19px; color:var(--text); font-weight:500}
+.overdue{color:var(--clay); font-weight:600}
+
+/* attendance buttons */
+.att-set{display:inline-flex; gap:4px}
+.att-btn{border:1px solid var(--line); background:var(--surface-2); border-radius:8px; padding:5px 11px; font-size:12.5px; font-weight:600; color:var(--muted); cursor:pointer; transition:.14s}
+.att-btn:hover{border-color:var(--accent)}
+.att-btn.on[data-s=present]{background:var(--accent); border-color:var(--accent); color:var(--cream)}
+.att-btn.on[data-s=absent]{background:var(--clay); border-color:var(--clay); color:#fff}
+.att-btn.on[data-s=late]{background:#C9A227; border-color:#C9A227; color:#2A2410}
+.att-btn.on[data-s=excused]{background:#7E8FA6; border-color:#7E8FA6; color:#fff}
+[data-theme="dark"] .att-btn.on[data-s=present]{color:#1E221C}
+
+.gradecell{width:66px; padding:6px 8px; text-align:center; border-radius:8px; font-variant-numeric:tabular-nums}
+.pct{font-weight:600; font-variant-numeric:tabular-nums}
+.pct.low{color:var(--clay)}
+
+.tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+.tag{font-size:11px; padding:2px 8px; border-radius:6px; background:var(--surface-2); color:var(--muted); border:1px solid var(--line-soft)}
+
+/* charts */
+.chart{display:flex; align-items:flex-end; gap:10px; height:170px; padding-top:10px}
+.bar-wrap{flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; min-width:0}
+.bar{width:100%; max-width:52px; background:var(--accent); border-radius:7px 7px 3px 3px; min-height:3px; transition:height .5s cubic-bezier(.2,.7,.3,1); position:relative}
+.bar.alt{background:var(--clay)}
+.bar-val{font-size:11.5px; font-weight:600; font-variant-numeric:tabular-nums}
+.bar-lbl{font-size:11px; color:var(--muted); text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%}
+.spark{width:100%; height:150px}
+
+/* =========================================================
+   MODAL / TOAST / SEARCH
+   ========================================================= */
+.modal-bg{
+  position:fixed; inset:0; background:rgba(30,34,28,.5); backdrop-filter:blur(3px);
+  display:none; align-items:flex-start; justify-content:center; z-index:100; padding:26px 16px; overflow-y:auto;
+}
+.modal-bg.show{display:flex}
+.modal{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  width:100%; max-width:560px; box-shadow:var(--shadow-lg); margin:auto;
+  animation:pop .22s cubic-bezier(.2,.7,.3,1);
+}
+.modal.wide{max-width:840px}
+@keyframes pop{from{opacity:0; transform:translateY(14px) scale(.985)} to{opacity:1; transform:none}}
+.modal-head{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:20px 22px 0}
+.modal-head h3{font-size:20px}
+.modal-body{padding:18px 22px}
+.modal-foot{display:flex; justify-content:flex-end; gap:9px; padding:0 22px 20px; flex-wrap:wrap}
+.x-btn{border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:22px; line-height:1; padding:4px 8px; border-radius:8px}
+.x-btn:hover{background:var(--surface-2); color:var(--text)}
+
+.toasts{position:fixed; right:20px; bottom:20px; z-index:200; display:flex; flex-direction:column; gap:9px; align-items:flex-end}
+.toast{
+  background:var(--charcoal); color:var(--cream); padding:11px 16px; border-radius:11px;
+  font-size:13.5px; font-weight:500; box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:9px;
+  animation:slide .26s cubic-bezier(.2,.7,.3,1);
+}
+[data-theme="dark"] .toast{background:var(--sage); color:#22261F}
+@keyframes slide{from{opacity:0; transform:translateX(24px)} to{opacity:1; transform:none}}
+.toast.out{opacity:0; transform:translateX(24px); transition:.3s}
+
+.results-group{margin-bottom:20px}
+.results-group h4{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-family:var(--sans); font-weight:600; margin-bottom:8px}
+.result{padding:11px 12px; border-radius:11px; cursor:pointer; border:1px solid transparent}
+.result:hover{background:var(--accent-soft); border-color:var(--line-soft)}
+.result b{font-weight:600; font-size:14px}
+.result span{display:block; font-size:12.5px; color:var(--muted); margin-top:2px}
+
+.banner{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between;
+  background:var(--clay-soft); border:1px solid rgba(185,121,99,.28); color:var(--text);
+  border-radius:var(--r); padding:12px 16px; margin-bottom:20px; font-size:13.5px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width:1180px){
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .split{grid-template-columns:1fr}
+  .lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  :root{--sidebar-w:264px}
+  .sidebar{transform:translateX(-102%); box-shadow:var(--shadow-lg)}
+  .sidebar.open{transform:none}
+  .main{margin-left:0; padding:20px 16px 80px}
+  .topbar{display:flex}
+  .g3,.g2,.week{grid-template-columns:1fr}
+  .week{gap:9px}
+  .day{min-height:auto}
+  .page-head h1{font-size:26px}
+  .hero{padding:22px 20px}
+  .hero h1{font-size:26px}
+  .card{padding:17px; border-radius:var(--r)}
+  .cal-cell{min-height:74px; padding:5px; border-radius:9px}
+  .ev{font-size:10px; padding:2px 5px}
+  .cal-week{grid-template-columns:44px repeat(7,minmax(0,1fr))}
+  .btn{padding:10px 15px}
+  .rail{padding-left:62px}
+  .rail::before{left:48px}
+  .rail-time{left:-62px; width:44px}
+}
+@media (max-width:560px){
+  .g4,.lesson-grid,.row{grid-template-columns:1fr}
+  .head-actions{width:100%}
+  .head-actions .btn{flex:1; justify-content:center}
+}
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+@media print{
+  .sidebar,.topbar,.head-actions,.toolbar,.no-print,.toasts,.scrim,.quickadd{display:none!important}
+  .main{margin:0; padding:0}
+  body{background:#fff; color:#000; font-size:12px}
+  .card,.stat,.tile{box-shadow:none; border:1px solid #ccc; break-inside:avoid; page-break-inside:avoid}
+  .hero{background:#fff; border:1px solid #ccc}
+  .view{display:none!important}
+  .view.active{display:block!important}
+  a{text-decoration:none; color:#000}
+  .cal-cell{min-height:78px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">T</div>
+      <div>
+        <span class="brand-name">TeacherFlow <em style="font-style:normal;color:var(--clay)">Pro</em></span>
+        <span class="brand-tag">Plan less. Teach better.</span>
+      </div>
+    </div>
+
+    <div class="searchbox">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="text" id="globalSearch" placeholder="Search everything…" autocomplete="off">
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+
+    <div class="nav-foot">
+      <div class="who">
+        <b id="whoName">Teacher</b>
+        <span id="whoSchool">Your school</span>
+      </div>
+      <button class="icon-btn" id="themeToggle" title="Switch theme" aria-label="Switch theme"></button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div style="flex:1;min-width:0">
+        <span class="brand-name" style="font-size:16px">TeacherFlow <em style="font-style:normal;color:var(--clay)">Pro</em></span>
+      </div>
+      <button class="icon-btn" id="menuSearch" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      </button>
+    </div>
+
+    <section class="view active" id="view-dashboard"></section>
+    <section class="view" id="view-calendar"></section>
+    <section class="view" id="view-lessons"></section>
+    <section class="view" id="view-classes"></section>
+    <section class="view" id="view-assignments"></section>
+    <section class="view" id="view-gradebook"></section>
+    <section class="view" id="view-attendance"></section>
+    <section class="view" id="view-todo"></section>
+    <section class="view" id="view-goals"></section>
+    <section class="view" id="view-resources"></section>
+    <section class="view" id="view-notes"></section>
+    <section class="view" id="view-reports"></section>
+    <section class="view" id="view-settings"></section>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modalTitle">Title</h3>
+      <button class="x-btn" id="modalX" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<script>
+/* =========================================================================
+   TEACHERFLOW PRO
+   A single-file teacher planner. No backend, no accounts — everything the
+   teacher enters is stored in this browser via localStorage.
+   ------------------------------------------------------------------------
+   SECTIONS
+   1. Icons + tiny DOM helpers
+   2. Data store (load / save / sample data)
+   3. Toasts, modals, generic form builder, confirmations
+   4. Navigation + router
+   5. Views (dashboard, calendar, lessons, classes, students, assignments,
+      gradebook, attendance, to-do, goals, resources, notes, reports,
+      settings)
+   6. Global search, export / import, theme, boot
+   ========================================================================= */
+
+/* =========================================================================
+   1. ICONS + DOM HELPERS
+   ========================================================================= */
+const ICONS = {
+  dashboard:'<rect x="3" y="3" width="7" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  lessons:'<path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2z"/>',
+  classes:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 15c2.8 0 5 1.8 5 4"/>',
+  assignments:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 11h6M9 15h4"/>',
+  gradebook:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>',
+  attendance:'<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 3v3M16 3v3M8.5 13.5l2.5 2.5 4.5-5"/>',
+  todo:'<path d="M9 5h11M9 12h11M9 19h11"/><path d="M4 5l1 1 1.8-2M4 12l1 1 1.8-2M4 19l1 1 1.8-2"/>',
+  goals:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+  resources:'<path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>',
+  notes:'<path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  reports:'<path d="M4 20h16"/><rect x="6" y="11" width="3" height="7" rx="1"/><rect x="11" y="6" width="3" height="12" rx="1"/><rect x="16" y="14" width="3" height="4" rx="1"/>',
+  settings:'<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.4"/><circle cx="8" cy="17" r="2.4"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  edit:'<path d="M4 20h4l10-10a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13M9 7V4h6v3"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>',
+  print:'<path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 1.8"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>',
+  moon:'<path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a8.3 8.3 0 1 0 10.5 10.5z"/>',
+  download:'<path d="M12 3v12M7.5 10.5L12 15l4.5-4.5M4 20h16"/>',
+  upload:'<path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M4 20h16"/>',
+  check:'<path d="M4.5 12.5l5 5 10-11"/>',
+  link:'<path d="M10 13a4 4 0 0 0 5.7.3l3-3A4 4 0 0 0 13 4.6l-1.7 1.7"/><path d="M14 11a4 4 0 0 0-5.7-.3l-3 3A4 4 0 0 0 11 19.4l1.7-1.7"/>',
+  star:'<path d="M12 3.5l2.7 5.6 6.1.8-4.5 4.3 1.2 6.1L12 17.4 6.5 20.3l1.2-6.1L3.2 9.9l6.1-.8z"/>',
+  users:'<circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>'
+};
+function icon(n, size){ return '<svg viewBox="0 0 24 24" width="'+(size||16)+'" height="'+(size||16)+'" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[n]||'')+'</svg>'; }
+
+const $  = (s, r) => (r||document).querySelector(s);
+const $$ = (s, r) => Array.from((r||document).querySelectorAll(s));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* --- date helpers (all dates are stored as plain YYYY-MM-DD strings) --- */
+const pad = n => String(n).padStart(2, '0');
+const isoOf = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const TODAY = () => isoOf(new Date());
+function shiftDay(days, from){ const d = from ? new Date(from + 'T12:00:00') : new Date(); d.setDate(d.getDate() + days); return isoOf(d); }
+function dateObj(iso){ return new Date(iso + 'T12:00:00'); }
+function fmtDate(iso, long){
+  if (!iso) return '—';
+  const d = dateObj(iso);
+  return d.toLocaleDateString(undefined, long ? {weekday:'long', month:'long', day:'numeric', year:'numeric'} : {month:'short', day:'numeric', year:'numeric'});
+}
+function fmtShort(iso){ if(!iso) return '—'; return dateObj(iso).toLocaleDateString(undefined, {month:'short', day:'numeric'}); }
+function fmtTime(t){
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  const ap = h >= 12 ? 'PM' : 'AM';
+  return ((h % 12) || 12) + ':' + pad(m) + ' ' + ap;
+}
+function daysUntil(iso){ return Math.round((dateObj(iso) - dateObj(TODAY())) / 86400000); }
+function relative(iso){
+  const n = daysUntil(iso);
+  if (n === 0) return 'Today';
+  if (n === 1) return 'Tomorrow';
+  if (n === -1) return 'Yesterday';
+  if (n < 0) return Math.abs(n) + ' days ago';
+  if (n < 7) return 'In ' + n + ' days';
+  return fmtShort(iso);
+}
+const DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+/* =========================================================================
+   2. DATA STORE
+   ========================================================================= */
+const KEY = 'teacherflowpro.v1';
+const CATEGORIES = ['Lesson','Assignment','Meeting','Personal','Deadline','Other'];
+const CLASS_COLORS = ['#65745B','#B97963','#7E8FA6','#A98BA6','#8C9E6E','#C9A227'];
+const TASK_CATS = ['Planning','Grading','Classroom','Administrative','Personal'];
+const RES_CATS = ['Math','Science','Reading','Writing','Classroom Management','Activities','Technology','Other'];
+const NOTE_CATS = ['Student Notes','Meeting Notes','Lesson Ideas','Parent Communication','Classroom Ideas','Personal'];
+const A_STATUS = ['Draft','Assigned','In Progress','Grading','Completed'];
+
+let DB = null;
+const UI = { view:'dashboard', classId:null, studentId:null, lessonId:null, calMode:'month', calCursor:TODAY(), attClass:null, attDate:TODAY(), gradeClass:null, taskFilter:'All' };
+
+function blank(){
+  return {
+    settings:{ teacherName:'', schoolName:'', schoolYear:'', defaultGrade:'', defaultSubject:'', theme:'light', sample:false },
+    classes:[], students:[], schedule:[], lessons:[], assignments:[], grades:{}, attendance:{},
+    events:[], tasks:[], goals:[], resources:[], notes:[]
+  };
+}
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(DB)); }
+  catch(e){ toast('Storage is full — export your planner to keep a backup.'); }
+}
+function load(){
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw){ DB = Object.assign(blank(), JSON.parse(raw)); return; }
+  } catch(e){ console.warn('Could not read saved data', e); }
+  DB = sampleData();
+  save();
+}
+
+/* --- shorthand accessors --- */
+const byId = (arr, id) => arr.find(x => x.id === id) || null;
+const classOf = id => byId(DB.classes, id);
+const className = id => (classOf(id) || {}).name || 'Unassigned';
+const classColor = id => (classOf(id) || {}).color || 'var(--olive)';
+const studentsOf = cid => DB.students.filter(s => s.classId === cid);
+const fullName = s => s ? (s.first + ' ' + s.last) : '';
+
+/* =========================================================================
+   SAMPLE DATA — clearly labelled, removable from Settings
+   ========================================================================= */
+function sampleData(){
+  const d = blank();
+  d.settings = { teacherName:'Emily Carter', schoolName:'Willow Creek Academy', schoolYear:'2026–2027',
+                 defaultGrade:'Grade 5', defaultSubject:'Math', theme:'light', sample:true };
+
+  const c1 = {id:'c1', name:'Math', subject:'Math', grade:'Grade 5', room:'204', period:'Period 1', color:'#65745B', sample:true};
+  const c2 = {id:'c2', name:'Science', subject:'Science', grade:'Grade 5', room:'204', period:'Period 2', color:'#8C9E6E', sample:true};
+  const c3 = {id:'c3', name:'English', subject:'English', grade:'Grade 6', room:'118', period:'Period 4', color:'#B97963', sample:true};
+  d.classes = [c1, c2, c3];
+
+  const names = [
+    ['Ava','Bennett'],['Noah','Reyes'],['Maya','Whitfield'],['Elijah','Park'],['Sofia','Marchetti'],['Liam','Okafor'],
+    ['Harper','Lindqvist'],['Mateo','Alvarez'],['Ruby','Nakamura'],['Owen','Delacroix'],['Iris','Kowalski'],['Jonah','Mbeki'],
+    ['Clara','Ferreira'],['Silas','Aldridge'],['Nina','Petrov'],['Theo','Haddad'],['Vera','Lindstrom'],['Caleb','Osei']
+  ];
+  names.forEach((n, i) => {
+    const cls = i < 6 ? 'c1' : i < 12 ? 'c2' : 'c3';
+    d.students.push({
+      id:'s' + (i + 1), classId:cls, first:n[0], last:n[1],
+      sid:'WC-' + (2400 + i), email:(n[0] + '.' + n[1]).toLowerCase() + '@willowcreek.edu',
+      notes: i === 2 ? 'Reads well above grade level — give extension work.' : (i === 4 ? 'Prefers a front-row seat.' : ''),
+      sample:true
+    });
+  });
+
+  d.schedule = [
+    {id:'sc1', classId:'c1', day:1, start:'08:30', end:'09:20', room:'204', lesson:'Fractions on a number line', status:'Planned', sample:true},
+    {id:'sc2', classId:'c2', day:1, start:'09:30', end:'10:20', room:'204', lesson:'States of matter lab', status:'Planned', sample:true},
+    {id:'sc3', classId:'c3', day:1, start:'11:15', end:'12:05', room:'118', lesson:'Paragraph structure', status:'Draft', sample:true},
+    {id:'sc4', classId:'c1', day:2, start:'08:30', end:'09:20', room:'204', lesson:'Comparing fractions', status:'Planned', sample:true},
+    {id:'sc5', classId:'c2', day:2, start:'09:30', end:'10:20', room:'204', lesson:'Lab write-up', status:'Planned', sample:true},
+    {id:'sc6', classId:'c1', day:3, start:'08:30', end:'09:20', room:'204', lesson:'Equivalent fractions', status:'Draft', sample:true},
+    {id:'sc7', classId:'c3', day:3, start:'11:15', end:'12:05', room:'118', lesson:'Peer review workshop', status:'Planned', sample:true},
+    {id:'sc8', classId:'c1', day:4, start:'08:30', end:'09:20', room:'204', lesson:'Fraction word problems', status:'Planned', sample:true},
+    {id:'sc9', classId:'c2', day:4, start:'09:30', end:'10:20', room:'204', lesson:'Density stations', status:'Draft', sample:true},
+    {id:'sc10', classId:'c1', day:5, start:'08:30', end:'09:20', room:'204', lesson:'Unit 4 quiz', status:'Planned', sample:true},
+    {id:'sc11', classId:'c3', day:5, start:'11:15', end:'12:05', room:'118', lesson:'Narrative drafting', status:'Planned', sample:true}
+  ];
+
+  d.lessons = [
+    {id:'l1', title:'Fractions on a number line', subject:'Math', grade:'Grade 5', classId:'c1', date:TODAY(),
+     duration:'50 min', unit:'Unit 4 — Fractions', standard:'5.NF.A.1',
+     objective:'Students will place fractions and mixed numbers accurately on a number line and explain their reasoning using benchmark fractions.',
+     materials:[{t:'Number line strips', done:true},{t:'Fraction tiles', done:true},{t:'Exit ticket copies', done:false}],
+     warmup:'Quick count-around by halves and quarters. Ask: which is closer to 1 — 3/4 or 5/8? Two volunteers explain.',
+     intro:'Anchor chart: what a number line tells us that a pie chart cannot. Model placing 2/3 by partitioning between 0 and 1.',
+     instruction:'Think-aloud placing 7/4 and 1 1/2. Emphasise equal partitioning and naming the whole before placing the part.',
+     guided:'Table pairs place five cards on a shared number line strip. Circulate and prompt: how do you know?',
+     independent:'Workbook p. 118, problems 1–12. Early finishers write one fraction riddle for a partner.',
+     assessment:'Exit ticket: place 5/6 and explain the reasoning in one sentence.',
+     homework:'Practice sheet 4.3, evens only.',
+     differentiation:'Pre-partitioned strips for the support group; open number lines with mixed numbers for the extension group.',
+     notes:'Ruby and Maya are ready for improper fractions — pull them for the extension task.', sample:true},
+    {id:'l2', title:'States of matter lab', subject:'Science', grade:'Grade 5', classId:'c2', date:TODAY(),
+     duration:'50 min', unit:'Unit 2 — Matter', standard:'5-PS1-1',
+     objective:'Students will observe and record how a substance changes state and explain the change in terms of particle movement.',
+     materials:[{t:'Ice cups', done:true},{t:'Hot plate', done:true},{t:'Lab sheets', done:true},{t:'Safety goggles', done:false}],
+     warmup:'Two-minute write: where have you seen water change form this week?',
+     intro:'Review safety rules for the hot plate. Assign lab roles at each table.',
+     instruction:'Demonstrate the observation table and how to record time and temperature together.',
+     guided:'Groups run station one together while I model recording on the board.',
+     independent:'Groups rotate through stations two and three and complete the observation table.',
+     assessment:'Lab sheet collected. Look for temperature readings paired with a written observation.',
+     homework:'Finish the conclusion paragraph.',
+     differentiation:'Sentence starters for written conclusions; challenge question on sublimation for the extension group.',
+     notes:'Set up the hot plate before first period.', sample:true},
+    {id:'l3', title:'Paragraph structure', subject:'English', grade:'Grade 6', classId:'c3', date:shiftDay(1),
+     duration:'50 min', unit:'Unit 3 — Writing', standard:'W.6.2',
+     objective:'Students will write a paragraph with a clear topic sentence, three supporting details and a closing sentence.',
+     materials:[{t:'Mentor paragraphs', done:true},{t:'Highlighters', done:false}],
+     warmup:'Colour-code a mentor paragraph: topic sentence, details, closing.',
+     intro:'Name the parts together and add them to the writing anchor chart.',
+     instruction:'Model drafting a paragraph on a shared topic, thinking aloud at each move.',
+     guided:'Shared writing: the class builds a second paragraph while I scribe.',
+     independent:'Students draft their own paragraph on a chosen prompt.',
+     assessment:'Collect drafts and check for the three required parts.',
+     homework:'Revise the closing sentence.',
+     differentiation:'Paragraph frame available; extension group adds a transition between details.',
+     notes:'', sample:true}
+  ];
+
+  d.assignments = [
+    {id:'a1', name:'Fractions Quiz', classId:'c1', subject:'Math', description:'Unit 4 checkpoint covering equivalence and comparison.', assigned:shiftDay(-5), due:shiftDay(-1), points:20, status:'Grading', sample:true},
+    {id:'a2', name:'Fraction Practice 4.3', classId:'c1', subject:'Math', description:'Homework set.', assigned:shiftDay(-2), due:shiftDay(1), points:10, status:'Assigned', sample:true},
+    {id:'a3', name:'Matter Lab Report', classId:'c2', subject:'Science', description:'Full lab write-up with conclusion.', assigned:shiftDay(-6), due:shiftDay(2), points:100, status:'In Progress', sample:true},
+    {id:'a4', name:'Narrative Draft', classId:'c3', subject:'English', description:'First draft of the personal narrative.', assigned:shiftDay(-3), due:shiftDay(4), points:50, status:'Assigned', sample:true},
+    {id:'a5', name:'Vocabulary Check 3', classId:'c3', subject:'English', description:'Unit 3 words.', assigned:shiftDay(-10), due:shiftDay(-4), points:20, status:'Completed', sample:true}
+  ];
+
+  /* deterministic-ish sample scores so the gradebook and charts look real */
+  const seeds = [0.93,0.81,0.97,0.74,0.88,0.9,0.85,0.79,0.95,0.7,0.92,0.83,0.87,0.76,0.91,0.8,0.94,0.86];
+  d.grades = {};
+  d.assignments.forEach(a => {
+    if (a.status === 'Draft' || a.status === 'Assigned') return;
+    d.grades[a.id] = {};
+    studentsOfIn(d, a.classId).forEach((s, i) => {
+      const f = seeds[(i + a.name.length) % seeds.length];
+      d.grades[a.id][s.id] = Math.round(a.points * f);
+    });
+  });
+
+  /* two weeks of attendance for the sample classes */
+  d.attendance = {};
+  for (let k = 0; k < 10; k++){
+    const day = shiftDay(-k);
+    const wd = dateObj(day).getDay();
+    if (wd === 0 || wd === 6) continue;
+    ['c1','c2','c3'].forEach(cid => {
+      const rec = {};
+      studentsOfIn(d, cid).forEach((s, i) => {
+        const r = (i + k) % 17;
+        rec[s.id] = r === 3 ? 'absent' : r === 7 ? 'late' : r === 11 ? 'excused' : 'present';
+      });
+      d.attendance[cid + '|' + day] = rec;
+    });
+  }
+
+  d.events = [
+    {id:'e1', title:'Grade level meeting', date:shiftDay(1), start:'15:15', end:'16:00', category:'Meeting', notes:'Bring the unit pacing guide.', sample:true},
+    {id:'e2', title:'Fractions Quiz', date:shiftDay(-1), start:'08:30', end:'09:20', category:'Assignment', notes:'', sample:true},
+    {id:'e3', title:'Report cards due', date:shiftDay(9), start:'', end:'', category:'Deadline', notes:'Submit through the portal by 4pm.', sample:true},
+    {id:'e4', title:'Parent conference — Bennett', date:shiftDay(3), start:'16:00', end:'16:20', category:'Meeting', notes:'', sample:true},
+    {id:'e5', title:'Field trip permission slips', date:shiftDay(5), start:'', end:'', category:'Deadline', notes:'', sample:true},
+    {id:'e6', title:'Matter lab', date:TODAY(), start:'09:30', end:'10:20', category:'Lesson', notes:'', sample:true},
+    {id:'e7', title:'Dentist', date:shiftDay(7), start:'14:00', end:'15:00', category:'Personal', notes:'', sample:true}
+  ];
+
+  d.tasks = [
+    {id:'t1', title:'Grade quizzes', due:TODAY(), priority:'High', cat:'Grading', notes:'Unit 4 fractions quiz — 18 papers.', done:false, sample:true},
+    {id:'t2', title:"Prepare tomorrow's lesson", due:TODAY(), priority:'High', cat:'Planning', notes:'', done:false, sample:true},
+    {id:'t3', title:'Send parent email', due:TODAY(), priority:'Medium', cat:'Administrative', notes:'Follow up about the reading extension group.', done:false, sample:true},
+    {id:'t4', title:'Update attendance', due:TODAY(), priority:'Medium', cat:'Administrative', notes:'', done:true, sample:true},
+    {id:'t5', title:'Refill the supply bins', due:shiftDay(2), priority:'Low', cat:'Classroom', notes:'', done:false, sample:true},
+    {id:'t6', title:'Book the library for the research unit', due:shiftDay(4), priority:'Medium', cat:'Planning', notes:'', done:false, sample:true}
+  ];
+
+  d.goals = [
+    {id:'g1', title:'Improve classroom organization', desc:'Set up systems so materials are ready before first period every day.', deadline:shiftDay(60), progress:45,
+     milestones:[{t:'Label all supply bins', done:true},{t:'Build a weekly prep routine', done:true},{t:'Digitise the handout library', done:false}], studentId:'', sample:true},
+    {id:'g2', title:'Increase student participation', desc:'Every student speaks in class at least once a day.', deadline:shiftDay(90), progress:30,
+     milestones:[{t:'Introduce talk partners', done:true},{t:'Track participation weekly', done:false},{t:'Add structured discussion protocols', done:false}], studentId:'', sample:true},
+    {id:'g3', title:'Reading fluency — Elijah', desc:'Move from 96 to 120 words per minute.', deadline:shiftDay(45), progress:60,
+     milestones:[{t:'Baseline assessment', done:true},{t:'Daily paired reading', done:true},{t:'Mid-point check', done:false}], studentId:'s4', sample:true}
+  ];
+
+  d.resources = [
+    {id:'r1', title:'Fraction number line generator', category:'Math', description:'Prints blank and partitioned number lines in any range.', url:'https://www.mathsbot.com/tools/numberLines', tags:'fractions, printable', sample:true},
+    {id:'r2', title:'Matter and states unit slides', category:'Science', description:'Slide deck used for the states of matter unit.', url:'', tags:'unit, slides', sample:true},
+    {id:'r3', title:'Paragraph mentor texts', category:'Writing', description:'Short mentor paragraphs for structure lessons.', url:'', tags:'writing, mentor text', sample:true},
+    {id:'r4', title:'Quiet transition signals', category:'Classroom Management', description:'Twelve call-and-response signals that work for grades 4–6.', url:'', tags:'transitions, routines', sample:true},
+    {id:'r5', title:'Exit ticket templates', category:'Activities', description:'Six formats for quick end-of-lesson checks.', url:'', tags:'assessment, exit ticket', sample:true}
+  ];
+
+  d.notes = [
+    {id:'n1', title:'Maya — extension plan', category:'Student Notes', content:'Reading well above grade level. Give the improper fractions extension and the independent research option in English.', date:shiftDay(-2), sample:true},
+    {id:'n2', title:'Grade level meeting', category:'Meeting Notes', content:'Pacing guide moves the fractions unit a week earlier next term. Report cards open on the 15th.', date:shiftDay(-4), sample:true},
+    {id:'n3', title:'Lesson idea — fraction market', category:'Lesson Ideas', content:'Students run a market stall pricing items in fractions of a dollar. Ties comparison and equivalence to money.', date:shiftDay(-1), sample:true},
+    {id:'n4', title:'Call with the Bennett family', category:'Parent Communication', content:'Discussed homework routine. They will try a set 20 minutes after dinner. Follow up in two weeks.', date:shiftDay(-6), sample:true}
+  ];
+
+  return d;
+}
+function studentsOfIn(d, cid){ return d.students.filter(s => s.classId === cid); }
+
+/* =========================================================================
+   3. TOASTS, MODALS, FORMS, CONFIRMATIONS
+   ========================================================================= */
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = icon('check', 15) + '<span>' + esc(msg) + '</span>';
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 320); }, 2600);
+}
+
+let modalOnClose = null;
+function openModal(title, bodyHTML, footHTML, wide){
+  $('#modalTitle').textContent = title;
+  $('#modalBody').innerHTML = bodyHTML;
+  $('#modalFoot').innerHTML = footHTML || '';
+  $('#modal').classList.toggle('wide', !!wide);
+  $('#modalBg').classList.add('show');
+  const first = $('#modalBody input, #modalBody textarea, #modalBody select');
+  if (first) setTimeout(() => first.focus(), 60);
+}
+function closeModal(){
+  $('#modalBg').classList.remove('show');
+  $('#modalBody').innerHTML = '';
+  if (modalOnClose){ const f = modalOnClose; modalOnClose = null; f(); }
+}
+
+/* Generic form builder — every create/edit dialog in the app uses this.
+   fields: {key,label,type,options,hint,full,required,placeholder,rows} */
+function openForm(opts){
+  const fields = opts.fields, vals = opts.values || {};
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 14px">';
+  fields.forEach(f => {
+    const v = vals[f.key] != null ? vals[f.key] : (f.default || '');
+    const span = f.full === false ? '' : 'grid-column:1/-1;';
+    html += '<div class="field" style="' + (f.half ? '' : span) + '">';
+    html += '<label for="f_' + f.key + '">' + esc(f.label) + (f.hint ? ' <span class="hint">' + esc(f.hint) + '</span>' : '') + '</label>';
+    if (f.type === 'textarea'){
+      html += '<textarea id="f_' + f.key + '" name="' + f.key + '" rows="' + (f.rows || 3) + '" placeholder="' + esc(f.placeholder || '') + '">' + esc(v) + '</textarea>';
+    } else if (f.type === 'select'){
+      html += '<select id="f_' + f.key + '" name="' + f.key + '">';
+      (f.options || []).forEach(o => {
+        const val = typeof o === 'object' ? o.v : o, lbl = typeof o === 'object' ? o.l : o;
+        html += '<option value="' + esc(val) + '"' + (String(val) === String(v) ? ' selected' : '') + '>' + esc(lbl) + '</option>';
+      });
+      html += '</select>';
+    } else if (f.type === 'color'){
+      html += '<div style="display:flex;gap:7px;flex-wrap:wrap" id="f_' + f.key + '" data-color="' + esc(v || CLASS_COLORS[0]) + '">';
+      CLASS_COLORS.forEach(c => {
+        html += '<button type="button" class="swatch" data-c="' + c + '" style="width:30px;height:30px;border-radius:9px;background:' + c + ';border:2px solid ' + (c === (v || CLASS_COLORS[0]) ? 'var(--text)' : 'transparent') + ';cursor:pointer"></button>';
+      });
+      html += '</div>';
+    } else {
+      html += '<input id="f_' + f.key + '" name="' + f.key + '" type="' + (f.type || 'text') + '" value="' + esc(v) + '" placeholder="' + esc(f.placeholder || '') + '">';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+
+  let foot = '';
+  if (opts.onDelete) foot += '<button class="btn danger" id="formDelete" style="margin-right:auto">' + icon('trash', 14) + 'Delete</button>';
+  foot += '<button class="btn" id="formCancel">Cancel</button>';
+  foot += '<button class="btn primary" id="formSave">' + esc(opts.saveLabel || 'Save') + '</button>';
+
+  openModal(opts.title, html, foot, opts.wide);
+
+  $$('#modalBody .swatch').forEach(b => b.addEventListener('click', () => {
+    const wrap = b.parentElement;
+    wrap.dataset.color = b.dataset.c;
+    $$('.swatch', wrap).forEach(x => x.style.borderColor = 'transparent');
+    b.style.borderColor = 'var(--text)';
+  }));
+
+  function collect(){
+    const out = {};
+    fields.forEach(f => {
+      const node = $('#f_' + f.key);
+      if (!node) return;
+      out[f.key] = f.type === 'color' ? node.dataset.color : (f.type === 'number' ? Number(node.value) : node.value.trim ? node.value.trim() : node.value);
+    });
+    return out;
+  }
+  $('#formCancel').onclick = closeModal;
+  $('#formSave').onclick = () => {
+    const data = collect();
+    const missing = fields.filter(f => f.required && !String(data[f.key] || '').length);
+    if (missing.length){ toast('Add a ' + missing[0].label.toLowerCase() + ' to continue.'); const n = $('#f_' + missing[0].key); if (n) n.focus(); return; }
+    closeModal();
+    opts.onSave(data);
+  };
+  if (opts.onDelete) $('#formDelete').onclick = () => {
+    closeModal();
+    confirmAction('Delete this?', opts.deleteMsg || 'This cannot be undone.', 'Delete', opts.onDelete);
+  };
+}
+
+function confirmAction(title, msg, label, onYes){
+  openModal(title, '<p style="margin:0;color:var(--muted);font-size:14px">' + esc(msg) + '</p>',
+    '<button class="btn" id="cNo">Cancel</button><button class="btn clay" id="cYes">' + esc(label) + '</button>');
+  $('#cNo').onclick = closeModal;
+  $('#cYes').onclick = () => { closeModal(); onYes(); };
+}
+
+/* =========================================================================
+   4. NAVIGATION + ROUTER
+   ========================================================================= */
+const NAV = [
+  {id:'dashboard', label:'Dashboard', icon:'dashboard'},
+  {id:'calendar', label:'Calendar', icon:'calendar'},
+  {id:'lessons', label:'Lesson Planner', icon:'lessons'},
+  {id:'classes', label:'Classes', icon:'classes'},
+  {id:'assignments', label:'Assignments', icon:'assignments'},
+  {id:'gradebook', label:'Gradebook', icon:'gradebook'},
+  {id:'attendance', label:'Attendance', icon:'attendance'},
+  {id:'todo', label:'To-Do', icon:'todo'},
+  {id:'goals', label:'Goals', icon:'goals'},
+  {id:'resources', label:'Resources', icon:'resources'},
+  {id:'notes', label:'Notes', icon:'notes'},
+  {id:'reports', label:'Reports', icon:'reports'},
+  {id:'settings', label:'Settings', icon:'settings'}
+];
+function buildNav(){
+  $('#nav').innerHTML = NAV.map(n =>
+    '<button class="nav-item' + (n.id === UI.view ? ' active' : '') + '" data-go="' + n.id + '">' + icon(n.icon, 17) + '<span>' + n.label + '</span></button>'
+  ).join('');
+  $$('#nav .nav-item').forEach(b => b.addEventListener('click', () => { go(b.dataset.go); closeSidebar(); }));
+}
+const RENDERERS = {};
+function go(view, opts){
+  UI.view = view;
+  if (opts) Object.assign(UI, opts);
+  $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+  buildNav();
+  if (RENDERERS[view]) RENDERERS[view]();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+function closeSidebar(){ $('#sidebar').classList.remove('open'); $('#scrim').classList.remove('show'); }
+
+/* Shared page header builder */
+function pageHead(eyebrow, title, sub, actions){
+  return '<div class="page-head no-print"><div><div class="eyebrow">' + esc(eyebrow) + '</div><h1>' + esc(title) + '</h1>' +
+    (sub ? '<p>' + esc(sub) + '</p>' : '') + '</div><div class="head-actions">' + (actions || '') + '</div></div>';
+}
+function emptyState(iconName, title, msg, btnLabel, btnId){
+  return '<div class="empty"><div class="empty-mark">' + icon(iconName, 25) + '</div><h3>' + esc(title) + '</h3><p>' + esc(msg) + '</p>' +
+    (btnLabel ? '<button class="btn primary" id="' + btnId + '">' + icon('plus', 14) + esc(btnLabel) + '</button>' : '') + '</div>';
+}
+function classOptions(includeBlank){
+  const o = DB.classes.map(c => ({v:c.id, l:c.name + ' — ' + c.grade}));
+  return includeBlank ? [{v:'', l:'— None —'}].concat(o) : o;
+}
+</script>
+<script>
+/* =========================================================================
+   5a. DASHBOARD
+   ========================================================================= */
+function todaySchedule(){
+  const wd = new Date().getDay();
+  return DB.schedule.filter(s => Number(s.day) === wd).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+}
+function greeting(){
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+}
+const MOTTOS = [
+  'Small steps create great classrooms.',
+  'A planned lesson is a calm classroom.',
+  'Teach the student in front of you.',
+  'Progress beats perfect planning.',
+  'The best resource in the room is you.'
+];
+
+RENDERERS.dashboard = function(){
+  const s = DB.settings;
+  const sched = todaySchedule();
+  const weekAhead = DB.assignments.filter(a => a.due && daysUntil(a.due) >= 0 && daysUntil(a.due) <= 7);
+  const openTasks = DB.tasks.filter(t => !t.done);
+  const lessonsThisWeek = DB.lessons.filter(l => l.date && daysUntil(l.date) >= -3 && daysUntil(l.date) <= 4);
+  const now = new Date().getHours() * 60 + new Date().getMinutes();
+  const firstName = (s.teacherName || '').split(' ')[0] || 'Teacher';
+  const motto = MOTTOS[new Date().getDate() % MOTTOS.length];
+
+  let h = '';
+  h += '<div class="hero"><div class="hero-rule"></div><div class="hero-rule two"></div>' +
+       '<div class="date">' + esc(fmtDate(TODAY(), true)) + '</div>' +
+       '<h1>' + greeting() + ', ' + esc(firstName) + '.</h1>' +
+       '<div class="sub">' + esc(s.schoolName || 'Your school') + (s.schoolYear ? ' · ' + esc(s.schoolYear) : '') + '</div>' +
+       '<div class="motto">' + esc(motto) + '</div></div>';
+
+  /* stat cards */
+  const stats = [
+    {l:'Classes today', v:sched.length, f:sched.length ? 'First bell at ' + fmtTime(sched[0].start) : 'Nothing scheduled', i:'classes'},
+    {l:'Lessons planned', v:lessonsThisWeek.length, f:DB.lessons.length + ' saved in total', i:'lessons'},
+    {l:'Assignments due', v:weekAhead.length, f:'In the next 7 days', i:'assignments'},
+    {l:'Tasks remaining', v:openTasks.length, f:openTasks.filter(t => t.priority === 'High').length + ' marked high priority', i:'todo'}
+  ];
+  h += '<div class="grid g4" style="margin-bottom:18px">' + stats.map(c =>
+    '<div class="stat"><div class="top"><span class="label">' + c.l + '</span><span class="ico">' + icon(c.i, 16) + '</span></div>' +
+    '<div class="big num">' + c.v + '</div><div class="foot">' + esc(c.f) + '</div></div>').join('') + '</div>';
+
+  /* schedule + priorities */
+  h += '<div class="split">';
+  h += '<div class="card"><div class="card-head"><div><h2>Today\'s schedule</h2><div class="sub">' + DOW[new Date().getDay()] + '</div></div>' +
+       '<button class="btn sm no-print" id="addSched">' + icon('plus', 13) + 'Add class</button></div>';
+  if (!sched.length){
+    h += emptyState('calendar', 'No classes today', 'Add the classes you teach on this day and they will appear here every week.', 'Add a class period', 'addSched2');
+  } else {
+    h += '<div class="rail">' + sched.map(it => {
+      const c = classOf(it.classId);
+      const [sh, sm] = (it.start || '0:0').split(':').map(Number);
+      const [eh, em] = (it.end || '0:0').split(':').map(Number);
+      const isNow = now >= sh * 60 + sm && now <= eh * 60 + em;
+      return '<div class="rail-item' + (isNow ? ' now' : '') + '">' +
+        '<div class="rail-time">' + fmtTime(it.start) + '<small>' + fmtTime(it.end) + '</small></div>' +
+        '<div class="rail-row"><div><div class="rail-title">' + esc(c ? c.name : 'Class') + (isNow ? ' <span class="chip clay">Now</span>' : '') + '</div>' +
+        '<div class="rail-meta">' + esc([c ? c.subject : '', c ? c.grade : '', it.room ? 'Room ' + it.room : ''].filter(Boolean).join(' · ')) + '</div>' +
+        (it.lesson ? '<div class="rail-lesson">' + icon('lessons', 13) + esc(it.lesson) + '</div>' : '') + '</div>' +
+        '<div class="rowacts no-print"><span class="chip plain">' + esc(it.status || 'Planned') + '</span>' +
+        '<button class="btn tiny" data-sched-edit="' + it.id + '">' + icon('edit', 12) + '</button></div></div></div>';
+    }).join('') + '</div>';
+  }
+  h += '</div>';
+
+  /* priorities */
+  const todayTasks = DB.tasks.filter(t => !t.due || daysUntil(t.due) <= 0 || t.due === TODAY()).slice(0, 8);
+  h += '<div class="card"><div class="card-head"><h2>Today\'s priorities</h2><span class="chip">' + todayTasks.filter(t => !t.done).length + ' open</span></div>';
+  h += todayTasks.length ? todayTasks.map(t => taskLine(t)).join('') :
+       '<p class="sub" style="margin:0">Nothing due today. Add something below if you want to get ahead.</p>';
+  h += '<div class="quickadd no-print"><input type="text" id="quickTask" placeholder="Add a task for today…"><button class="btn primary" id="quickAdd">' + icon('plus', 14) + '</button></div>';
+  h += '</div></div>';
+
+  /* upcoming */
+  const up = upcomingItems(6);
+  h += '<div class="card"><div class="card-head"><h2>Coming up</h2><button class="btn sm no-print" data-go-btn="calendar">Open calendar</button></div>';
+  h += up.length ? up.map(u =>
+      '<div class="list-line"><div><div class="ll-t">' + esc(u.title) + '</div><div class="ll-m">' + esc(u.meta) + '</div></div>' +
+      '<span class="chip' + (daysUntil(u.date) <= 1 ? ' clay' : ' plain') + '">' + esc(relative(u.date)) + '</span></div>').join('')
+    : '<p class="sub" style="margin:0">Nothing on the horizon. Enjoy the quiet week.</p>';
+  h += '</div>';
+
+  /* weekly overview */
+  h += '<div class="card"><div class="card-head"><h2>This week</h2><div class="sub">Monday to Friday at a glance</div></div><div class="week">';
+  for (let d = 1; d <= 5; d++){
+    const items = DB.schedule.filter(x => Number(x.day) === d).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+    const dayIso = mondayOfThisWeek(d);
+    const tasks = DB.tasks.filter(t => t.due === dayIso && !t.done);
+    h += '<div class="day' + (new Date().getDay() === d ? ' today' : '') + '"><h4>' + DOW[d].slice(0, 3) + ' ' + dateObj(dayIso).getDate() + '</h4>';
+    if (!items.length && !tasks.length) h += '<div class="sub" style="font-size:12px">Open day</div>';
+    items.forEach(it => {
+      h += '<div class="li"><span class="dot" style="background:' + classColor(it.classId) + '"></span><span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(fmtTime(it.start)) + ' ' + esc(className(it.classId)) + '</span></div>';
+    });
+    tasks.slice(0, 2).forEach(t => { h += '<div class="li" style="color:var(--muted)">' + icon('check', 11) + '<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(t.title) + '</span></div>'; });
+    h += '</div>';
+  }
+  h += '</div></div>';
+
+  $('#view-dashboard').innerHTML = h;
+
+  /* wiring */
+  const addS = () => scheduleForm();
+  if ($('#addSched')) $('#addSched').onclick = addS;
+  if ($('#addSched2')) $('#addSched2').onclick = addS;
+  $$('[data-sched-edit]').forEach(b => b.onclick = () => scheduleForm(b.dataset.schedEdit));
+  $$('[data-go-btn]').forEach(b => b.onclick = () => go(b.dataset.goBtn));
+  wireTaskLines($('#view-dashboard'));
+  if ($('#quickAdd')) {
+    const add = () => {
+      const v = $('#quickTask').value.trim();
+      if (!v) return;
+      DB.tasks.unshift({id:uid(), title:v, due:TODAY(), priority:'Medium', cat:'Planning', notes:'', done:false});
+      save(); toast('Task added.'); RENDERERS.dashboard();
+    };
+    $('#quickAdd').onclick = add;
+    $('#quickTask').onkeydown = e => { if (e.key === 'Enter') add(); };
+  }
+};
+
+function mondayOfThisWeek(dayIndex){
+  const now = new Date();
+  const diff = dayIndex - now.getDay();
+  return shiftDay(diff);
+}
+function upcomingItems(limit){
+  const out = [];
+  DB.assignments.forEach(a => { if (a.due && daysUntil(a.due) >= 0) out.push({date:a.due, title:a.name, meta:'Assignment due · ' + className(a.classId) + ' · ' + a.points + ' pts'}); });
+  DB.events.forEach(e => { if (daysUntil(e.date) >= 0) out.push({date:e.date, title:e.title, meta:e.category + (e.start ? ' · ' + fmtTime(e.start) : '')}); });
+  DB.lessons.forEach(l => { if (l.date && daysUntil(l.date) > 0) out.push({date:l.date, title:l.title, meta:'Lesson · ' + className(l.classId)}); });
+  DB.tasks.forEach(t => { if (!t.done && t.due && daysUntil(t.due) > 0) out.push({date:t.due, title:t.title, meta:'Task · ' + t.cat}); });
+  return out.sort((a, b) => a.date.localeCompare(b.date)).slice(0, limit || 6);
+}
+
+/* one to-do row, reused by dashboard + to-do view */
+function taskLine(t){
+  return '<label class="check' + (t.done ? ' done' : '') + '">' +
+    '<input type="checkbox" data-task-toggle="' + t.id + '"' + (t.done ? ' checked' : '') + '>' +
+    '<span class="t">' + esc(t.title) +
+    '<span class="m"><span class="chip plain">' + esc(t.cat) + '</span>' +
+    '<span' + (t.due && daysUntil(t.due) < 0 && !t.done ? ' class="overdue"' : '') + '>' + (t.due ? esc(relative(t.due)) : 'No date') + '</span>' +
+    (t.priority === 'High' ? '<span class="chip clay">High</span>' : '') +
+    (t.notes ? '<span>' + esc(t.notes) + '</span>' : '') + '</span></span>' +
+    '<button class="btn tiny no-print" data-task-edit="' + t.id + '">' + icon('edit', 12) + '</button></label>';
+}
+function wireTaskLines(root){
+  $$('[data-task-toggle]', root).forEach(cb => cb.onclick = e => {
+    e.stopPropagation();
+    const t = byId(DB.tasks, cb.dataset.taskToggle);
+    t.done = cb.checked; save();
+    if (UI.view === 'todo') RENDERERS.todo(); else RENDERERS.dashboard();
+  });
+  $$('[data-task-edit]', root).forEach(b => b.onclick = e => { e.preventDefault(); e.stopPropagation(); taskForm(b.dataset.taskEdit); });
+}
+
+/* schedule item dialog */
+function scheduleForm(id){
+  if (!DB.classes.length){ toast('Create a class first.'); go('classes'); return; }
+  const it = id ? byId(DB.schedule, id) : null;
+  openForm({
+    title: it ? 'Edit class period' : 'Add class period',
+    values: it || {day:String(new Date().getDay()), start:'08:30', end:'09:20', status:'Planned'},
+    fields:[
+      {key:'classId', label:'Class', type:'select', options:classOptions(), half:true},
+      {key:'day', label:'Day', type:'select', half:true, options:[{v:'1',l:'Monday'},{v:'2',l:'Tuesday'},{v:'3',l:'Wednesday'},{v:'4',l:'Thursday'},{v:'5',l:'Friday'},{v:'6',l:'Saturday'},{v:'0',l:'Sunday'}]},
+      {key:'start', label:'Starts', type:'time', half:true},
+      {key:'end', label:'Ends', type:'time', half:true},
+      {key:'room', label:'Room', half:true},
+      {key:'status', label:'Status', type:'select', half:true, options:['Planned','Draft','Taught','Cancelled']},
+      {key:'lesson', label:'Lesson title', placeholder:'What are you teaching?'}
+    ],
+    onSave(v){
+      if (it) Object.assign(it, v);
+      else DB.schedule.push(Object.assign({id:uid()}, v));
+      save(); toast('Schedule updated.'); RENDERERS.dashboard();
+    },
+    onDelete: it ? () => { DB.schedule = DB.schedule.filter(x => x.id !== id); save(); toast('Class period removed.'); RENDERERS.dashboard(); } : null
+  });
+}
+
+/* =========================================================================
+   5b. CALENDAR
+   ========================================================================= */
+function calItems(iso){
+  const out = [];
+  DB.events.filter(e => e.date === iso).forEach(e => out.push({kind:'event', id:e.id, title:e.title, cat:e.category, time:e.start}));
+  DB.assignments.filter(a => a.due === iso).forEach(a => out.push({kind:'assignment', id:a.id, title:a.name + ' due', cat:'Assignment', time:''}));
+  DB.lessons.filter(l => l.date === iso).forEach(l => out.push({kind:'lesson', id:l.id, title:l.title, cat:'Lesson', time:''}));
+  return out.sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
+}
+function evChip(it, showTime){
+  return '<div class="ev ' + it.cat.toLowerCase() + '" data-cal="' + it.kind + ':' + it.id + '">' +
+    (showTime && it.time ? '<b>' + esc(fmtTime(it.time)) + '</b> ' : '') + esc(it.title) + '</div>';
+}
+
+RENDERERS.calendar = function(){
+  const cur = dateObj(UI.calCursor);
+  let h = pageHead('Calendar', MONTHS[cur.getMonth()] + ' ' + cur.getFullYear(), 'Lessons, assignments and everything else in one month view.',
+    '<div class="seg">' + ['month','week','day'].map(m => '<button data-mode="' + m + '"' + (UI.calMode === m ? ' class="on"' : '') + '>' + m[0].toUpperCase() + m.slice(1) + '</button>').join('') + '</div>' +
+    '<button class="btn" id="calPrev">‹</button><button class="btn" id="calToday">Today</button><button class="btn" id="calNext">›</button>' +
+    '<button class="btn primary" id="calAdd">' + icon('plus', 14) + 'New event</button>');
+
+  h += '<div class="card">';
+  if (UI.calMode === 'month') h += monthGrid(cur);
+  else if (UI.calMode === 'week') h += weekGrid(cur);
+  else h += dayList(UI.calCursor);
+  h += '</div>';
+
+  h += '<div class="card no-print"><div class="card-head"><h3>Category key</h3></div><div style="display:flex;gap:9px;flex-wrap:wrap">' +
+    CATEGORIES.map(c => '<span class="ev ' + c.toLowerCase() + '" style="cursor:default">' + c + '</span>').join('') + '</div></div>';
+
+  $('#view-calendar').innerHTML = h;
+
+  $$('[data-mode]').forEach(b => b.onclick = () => { UI.calMode = b.dataset.mode; RENDERERS.calendar(); });
+  $('#calToday').onclick = () => { UI.calCursor = TODAY(); RENDERERS.calendar(); };
+  $('#calPrev').onclick = () => { UI.calCursor = calStep(-1); RENDERERS.calendar(); };
+  $('#calNext').onclick = () => { UI.calCursor = calStep(1); RENDERERS.calendar(); };
+  $('#calAdd').onclick = () => eventForm(null, UI.calCursor);
+  $$('[data-day]').forEach(c => c.onclick = e => { if (!e.target.closest('.ev')) eventForm(null, c.dataset.day); });
+  $$('[data-cal]').forEach(c => c.onclick = e => {
+    e.stopPropagation();
+    const [kind, id] = c.dataset.cal.split(':');
+    if (kind === 'event') eventDetails(id);
+    else if (kind === 'assignment') assignmentForm(id);
+    else openLesson(id);
+  });
+};
+function calStep(dir){
+  const d = dateObj(UI.calCursor);
+  if (UI.calMode === 'month'){ d.setDate(1); d.setMonth(d.getMonth() + dir); }
+  else if (UI.calMode === 'week') d.setDate(d.getDate() + 7 * dir);
+  else d.setDate(d.getDate() + dir);
+  return isoOf(d);
+}
+function monthGrid(cur){
+  const first = new Date(cur.getFullYear(), cur.getMonth(), 1);
+  const start = new Date(first); start.setDate(1 - first.getDay());
+  let h = '<div class="cal-grid">' + ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => '<div class="cal-dow">' + d + '</div>').join('') + '</div><div class="cal-grid">';
+  for (let i = 0; i < 42; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const iso = isoOf(d), out = d.getMonth() !== cur.getMonth();
+    const items = calItems(iso);
+    h += '<div class="cal-cell' + (out ? ' out' : '') + (iso === TODAY() ? ' today' : '') + '" data-day="' + iso + '">' +
+      '<div class="d">' + d.getDate() + '</div>' + items.slice(0, 3).map(it => evChip(it)).join('') +
+      (items.length > 3 ? '<div class="sub" style="font-size:10.5px;padding-left:3px">+' + (items.length - 3) + ' more</div>' : '') + '</div>';
+    if (i % 7 === 6 && d > new Date(cur.getFullYear(), cur.getMonth() + 1, 0)) break;
+  }
+  return h + '</div>';
+}
+function weekGrid(cur){
+  const start = new Date(cur); start.setDate(cur.getDate() - cur.getDay());
+  let h = '<div class="cal-grid">';
+  for (let i = 0; i < 7; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    h += '<div class="cal-dow">' + DOW[d.getDay()].slice(0, 3) + ' ' + d.getDate() + '</div>';
+  }
+  h += '</div><div class="cal-grid">';
+  for (let i = 0; i < 7; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const iso = isoOf(d);
+    h += '<div class="cal-cell" style="min-height:180px" data-day="' + iso + '">' +
+      (iso === TODAY() ? '<div class="chip" style="margin-bottom:6px">Today</div>' : '') +
+      calItems(iso).map(it => evChip(it, true)).join('') + '</div>';
+  }
+  return h + '</div>';
+}
+function dayList(iso){
+  const items = calItems(iso);
+  const sched = DB.schedule.filter(s => Number(s.day) === dateObj(iso).getDay()).sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+  let h = '<div class="card-head"><div><h3>' + fmtDate(iso, true) + '</h3><div class="sub">' + items.length + ' events · ' + sched.length + ' class periods</div></div></div>';
+  h += '<div class="split" style="gap:20px"><div>';
+  h += '<h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--sans);margin-bottom:10px">Events</h4>';
+  h += items.length ? '<div class="cal-day-list">' + items.map(it => evChip(it, true)).join('') + '</div>' : '<p class="sub">Nothing scheduled. Click below to add something.</p>';
+  h += '<button class="btn sm no-print" style="margin-top:12px" data-day="' + iso + '">' + icon('plus', 13) + 'Add event</button></div><div>';
+  h += '<h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-family:var(--sans);margin-bottom:10px">Class periods</h4>';
+  h += sched.length ? sched.map(s =>
+      '<div class="list-line"><div><div class="ll-t">' + esc(className(s.classId)) + '</div><div class="ll-m">' + esc(s.lesson || 'No lesson title') + '</div></div>' +
+      '<span class="chip plain">' + esc(fmtTime(s.start)) + '</span></div>').join('')
+    : '<p class="sub">No classes on this day.</p>';
+  return h + '</div></div>';
+}
+function eventForm(id, presetDate){
+  const e = id ? byId(DB.events, id) : null;
+  openForm({
+    title: e ? 'Edit event' : 'New event',
+    values: e || {date:presetDate || TODAY(), category:'Lesson'},
+    fields:[
+      {key:'title', label:'Title', required:true, placeholder:'What is happening?'},
+      {key:'date', label:'Date', type:'date', half:true},
+      {key:'category', label:'Category', type:'select', options:CATEGORIES, half:true},
+      {key:'start', label:'Starts', type:'time', half:true},
+      {key:'end', label:'Ends', type:'time', half:true},
+      {key:'notes', label:'Notes', type:'textarea', rows:3}
+    ],
+    onSave(v){
+      if (e) Object.assign(e, v); else DB.events.push(Object.assign({id:uid()}, v));
+      save(); toast(e ? 'Event updated.' : 'Event added.'); RENDERERS.calendar();
+    },
+    onDelete: e ? () => { DB.events = DB.events.filter(x => x.id !== id); save(); toast('Event deleted.'); RENDERERS.calendar(); } : null
+  });
+}
+function eventDetails(id){
+  const e = byId(DB.events, id);
+  if (!e) return;
+  const body = '<div class="chip" style="margin-bottom:12px">' + esc(e.category) + '</div>' +
+    '<p style="margin:0 0 6px"><b>' + esc(fmtDate(e.date, true)) + '</b></p>' +
+    '<p class="sub" style="margin:0 0 12px">' + (e.start ? esc(fmtTime(e.start)) + (e.end ? ' – ' + esc(fmtTime(e.end)) : '') : 'All day') + '</p>' +
+    (e.notes ? '<p style="margin:0;white-space:pre-wrap">' + esc(e.notes) + '</p>' : '<p class="sub" style="margin:0">No notes.</p>');
+  openModal(e.title, body,
+    '<button class="btn danger" id="evDel" style="margin-right:auto">' + icon('trash', 13) + 'Delete</button>' +
+    '<button class="btn" id="evDup">' + icon('copy', 13) + 'Duplicate</button>' +
+    '<button class="btn primary" id="evEdit">' + icon('edit', 13) + 'Edit</button>');
+  $('#evEdit').onclick = () => { closeModal(); eventForm(id); };
+  $('#evDup').onclick = () => { const c = Object.assign({}, e, {id:uid(), title:e.title + ' (copy)'}); delete c.sample; DB.events.push(c); save(); closeModal(); toast('Event duplicated.'); RENDERERS.calendar(); };
+  $('#evDel').onclick = () => { closeModal(); confirmAction('Delete event?', 'This removes “' + e.title + '” from your calendar.', 'Delete', () => { DB.events = DB.events.filter(x => x.id !== id); save(); toast('Event deleted.'); RENDERERS.calendar(); }); };
+}
+
+/* =========================================================================
+   5c. LESSON PLANNER
+   ========================================================================= */
+let draft = null;
+const LESSON_SECTIONS = [
+  {k:'objective', l:'Learning objective', p:'What should students know or be able to do?', rows:3},
+  {k:'warmup', l:'Warm-up / bell ringer', p:'The first five minutes.', rows:3},
+  {k:'intro', l:'Introduction', p:'How you open the lesson.', rows:3},
+  {k:'instruction', l:'Instruction', p:'Direct teaching, modelling, think-alouds.', rows:4},
+  {k:'guided', l:'Guided practice', p:'What you do together.', rows:3},
+  {k:'independent', l:'Independent practice', p:'What students do on their own.', rows:3},
+  {k:'assessment', l:'Assessment', p:'How you will know they got it.', rows:3},
+  {k:'homework', l:'Homework', p:'What goes home.', rows:2},
+  {k:'differentiation', l:'Differentiation', p:'Support and extension.', rows:3},
+  {k:'notes', l:'Teacher notes', p:'Reminders for future you.', rows:3}
+];
+function newDraft(){
+  return {id:null, title:'', subject:DB.settings.defaultSubject || '', grade:DB.settings.defaultGrade || '', classId:(DB.classes[0] || {}).id || '',
+    date:TODAY(), duration:'50 min', unit:'', standard:'', materials:[],
+    objective:'', warmup:'', intro:'', instruction:'', guided:'', independent:'', assessment:'', homework:'', differentiation:'', notes:''};
+}
+function openLesson(id){
+  const l = byId(DB.lessons, id);
+  if (!l) return;
+  draft = JSON.parse(JSON.stringify(l));
+  UI.lessonId = id;
+  go('lessons');
+}
+RENDERERS.lessons = function(){
+  if (!draft) draft = newDraft();
+  let h = pageHead('Lesson planner', draft.id ? 'Editing lesson' : 'Plan a lesson', 'Build the lesson once, reuse it whenever you teach it again.',
+    '<button class="btn" id="lNew">' + icon('plus', 14) + 'New lesson</button>' +
+    '<button class="btn" id="lPrint">' + icon('print', 14) + 'Print</button>' +
+    '<button class="btn primary" id="lSave">' + icon('check', 14) + 'Save lesson</button>');
+
+  /* header fields */
+  h += '<div class="card"><div class="card-head"><h2>Lesson details</h2>' +
+       (draft.id ? '<div class="head-actions no-print"><button class="btn sm" id="lDup">' + icon('copy', 13) + 'Duplicate</button><button class="btn sm danger" id="lDel">' + icon('trash', 13) + 'Delete</button></div>' : '') + '</div>';
+  h += '<div class="field"><label for="d_title">Lesson title</label><input id="d_title" type="text" value="' + esc(draft.title) + '" placeholder="e.g. Fractions on a number line"></div>';
+  h += '<div class="lesson-grid">' +
+    fieldSel('d_subject', 'Subject', draft.subject, ['','Math','Science','English','Reading','Writing','Social Studies','Art','Music','PE','Other']) +
+    fieldTxt('d_grade', 'Grade', draft.grade, 'Grade 5') +
+    fieldSel('d_classId', 'Class', draft.classId, [''].concat(DB.classes.map(c => c.id)), DB.classes) +
+    fieldTxt('d_date', 'Date', draft.date, '', 'date') +
+    fieldTxt('d_duration', 'Duration', draft.duration, '50 min') +
+    fieldTxt('d_unit', 'Unit', draft.unit, 'Unit 4 — Fractions') +
+    fieldTxt('d_standard', 'Standard', draft.standard, '5.NF.A.1') +
+    '</div></div>';
+
+  /* materials */
+  h += '<div class="card"><div class="card-head"><h3>Materials</h3><span class="sub">' + draft.materials.filter(m => m.done).length + ' of ' + draft.materials.length + ' ready</span></div>' +
+    '<div id="matList">' + matHTML() + '</div>' +
+    '<div class="quickadd no-print"><input type="text" id="matNew" placeholder="Add a material…"><button class="btn" id="matAdd">' + icon('plus', 14) + '</button></div></div>';
+
+  /* content sections */
+  h += '<div class="grid g2" style="margin-top:18px">';
+  LESSON_SECTIONS.forEach(s => {
+    h += '<div class="card" style="margin:0"><div class="field" style="margin:0"><label for="d_' + s.k + '">' + s.l + '</label>' +
+      '<textarea id="d_' + s.k + '" rows="' + s.rows + '" placeholder="' + esc(s.p) + '">' + esc(draft[s.k]) + '</textarea></div></div>';
+  });
+  h += '</div>';
+
+  h += '<div class="head-actions no-print" style="margin-top:18px">' +
+    '<button class="btn primary" id="lSave2">' + icon('check', 14) + 'Save lesson</button>' +
+    '<button class="btn" id="lClear">Clear form</button></div>';
+
+  /* saved lessons */
+  h += '<div class="card no-print" style="margin-top:26px"><div class="card-head"><h2>Saved lessons</h2><span class="chip">' + DB.lessons.length + '</span></div>';
+  h += '<div class="toolbar"><input type="text" id="lSearch" placeholder="Search lessons…">' +
+    selectFilter('lFilterSub', 'All subjects', uniq(DB.lessons.map(l => l.subject))) +
+    selectFilter('lFilterGrade', 'All grades', uniq(DB.lessons.map(l => l.grade))) +
+    selectFilter('lFilterUnit', 'All units', uniq(DB.lessons.map(l => l.unit))) + '</div>';
+  h += '<div id="lessonList"></div></div>';
+
+  $('#view-lessons').innerHTML = h;
+  renderLessonList();
+
+  $('#lNew').onclick = () => { draft = newDraft(); UI.lessonId = null; RENDERERS.lessons(); toast('Blank lesson ready.'); };
+  $('#lPrint').onclick = () => window.print();
+  $('#lSave').onclick = saveLesson;
+  $('#lSave2').onclick = saveLesson;
+  $('#lClear').onclick = () => confirmAction('Clear the form?', 'Anything not saved will be lost.', 'Clear', () => { draft = newDraft(); UI.lessonId = null; RENDERERS.lessons(); });
+  if ($('#lDup')) $('#lDup').onclick = () => { readDraft(); draft.id = null; draft.title = draft.title + ' (copy)'; delete draft.sample; saveLesson(); };
+  if ($('#lDel')) $('#lDel').onclick = () => confirmAction('Delete lesson?', 'This removes it from your saved lessons.', 'Delete', () => {
+    DB.lessons = DB.lessons.filter(x => x.id !== draft.id); save(); draft = newDraft(); toast('Lesson deleted.'); RENDERERS.lessons();
+  });
+  $('#matAdd').onclick = addMat;
+  $('#matNew').onkeydown = e => { if (e.key === 'Enter') addMat(); };
+  wireMats();
+  ['lSearch','lFilterSub','lFilterGrade','lFilterUnit'].forEach(i => { const n = $('#' + i); if (n) n.oninput = renderLessonList; });
+};
+function fieldTxt(id, label, val, ph, type){
+  return '<div class="field"><label for="' + id + '">' + label + '</label><input id="' + id + '" type="' + (type || 'text') + '" value="' + esc(val) + '" placeholder="' + esc(ph || '') + '"></div>';
+}
+function fieldSel(id, label, val, opts, classList){
+  let o = '';
+  if (classList){
+    o = '<option value="">— None —</option>' + classList.map(c => '<option value="' + c.id + '"' + (c.id === val ? ' selected' : '') + '>' + esc(c.name + ' — ' + c.grade) + '</option>').join('');
+  } else {
+    o = opts.map(x => '<option value="' + esc(x) + '"' + (x === val ? ' selected' : '') + '>' + (x || '— Select —') + '</option>').join('');
+  }
+  return '<div class="field"><label for="' + id + '">' + label + '</label><select id="' + id + '">' + o + '</select></div>';
+}
+function selectFilter(id, allLabel, values){
+  return '<select id="' + id + '"><option value="">' + allLabel + '</option>' + values.filter(Boolean).map(v => '<option value="' + esc(v) + '">' + esc(v) + '</option>').join('') + '</select>';
+}
+function uniq(a){ return Array.from(new Set(a.filter(Boolean))).sort(); }
+function matHTML(){
+  if (!draft.materials.length) return '<p class="sub" style="margin:0">No materials listed yet.</p>';
+  return draft.materials.map((m, i) =>
+    '<label class="mat"><input type="checkbox" data-mat="' + i + '"' + (m.done ? ' checked' : '') + '><span>' + esc(m.t) + '</span>' +
+    '<button class="x no-print" data-matdel="' + i + '" title="Remove">&times;</button></label>').join('');
+}
+function wireMats(){
+  $$('[data-mat]').forEach(cb => cb.onchange = () => { draft.materials[+cb.dataset.mat].done = cb.checked; });
+  $$('[data-matdel]').forEach(b => b.onclick = e => { e.preventDefault(); draft.materials.splice(+b.dataset.matdel, 1); $('#matList').innerHTML = matHTML(); wireMats(); });
+}
+function addMat(){
+  const v = $('#matNew').value.trim();
+  if (!v) return;
+  draft.materials.push({t:v, done:false});
+  $('#matNew').value = '';
+  $('#matList').innerHTML = matHTML(); wireMats();
+}
+function readDraft(){
+  draft.title = $('#d_title').value.trim();
+  ['subject','grade','classId','date','duration','unit','standard'].forEach(k => { const n = $('#d_' + k); if (n) draft[k] = n.value; });
+  LESSON_SECTIONS.forEach(s => { const n = $('#d_' + s.k); if (n) draft[s.k] = n.value; });
+}
+function saveLesson(){
+  readDraft();
+  if (!draft.title){ toast('Give the lesson a title first.'); $('#d_title').focus(); return; }
+  if (draft.id){
+    const l = byId(DB.lessons, draft.id);
+    Object.assign(l, draft);
+  } else {
+    draft.id = uid();
+    DB.lessons.unshift(JSON.parse(JSON.stringify(draft)));
+  }
+  UI.lessonId = draft.id;
+  save(); toast('Lesson saved successfully.'); RENDERERS.lessons();
+}
+function renderLessonList(){
+  const q = ($('#lSearch') && $('#lSearch').value || '').toLowerCase();
+  const fs = $('#lFilterSub') ? $('#lFilterSub').value : '';
+  const fg = $('#lFilterGrade') ? $('#lFilterGrade').value : '';
+  const fu = $('#lFilterUnit') ? $('#lFilterUnit').value : '';
+  const list = DB.lessons.filter(l =>
+    (!q || (l.title + ' ' + l.unit + ' ' + l.objective).toLowerCase().includes(q)) &&
+    (!fs || l.subject === fs) && (!fg || l.grade === fg) && (!fu || l.unit === fu));
+  const box = $('#lessonList');
+  if (!DB.lessons.length){
+    box.innerHTML = emptyState('lessons', 'No lessons planned yet', 'Fill in the planner above and save it — every lesson you save shows up here, ready to reopen.', 'Start with the title field', 'focusTitle');
+    if ($('#focusTitle')) $('#focusTitle').onclick = () => $('#d_title').focus();
+    return;
+  }
+  if (!list.length){ box.innerHTML = '<p class="sub" style="margin:0">No lessons match those filters.</p>'; return; }
+  box.innerHTML = '<div class="grid g3">' + list.map(l =>
+    '<div class="tile"><span class="band" style="background:' + (l.classId ? classColor(l.classId) : 'var(--olive)') + '"></span>' +
+    '<h3>' + esc(l.title) + '</h3><div class="sub">' + esc(l.unit || 'No unit') + '</div>' +
+    '<div class="tile-meta"><span>' + esc(l.subject || '—') + '</span><span>' + esc(l.grade || '—') + '</span><span>' + esc(fmtShort(l.date)) + '</span></div>' +
+    '<div class="tile-foot"><span class="chip plain">' + esc(l.standard || 'No standard') + '</span>' +
+    '<button class="btn tiny" data-open-lesson="' + l.id + '">Open</button></div></div>').join('') + '</div>';
+  $$('[data-open-lesson]').forEach(b => b.onclick = () => openLesson(b.dataset.openLesson));
+}
+</script>
+<script>
+/* =========================================================================
+   GRADE + ATTENDANCE CALCULATIONS (shared by several views)
+   ========================================================================= */
+function scoreOf(aId, sId){ const g = DB.grades[aId]; return g && g[sId] != null && g[sId] !== '' ? Number(g[sId]) : null; }
+function setScore(aId, sId, val){
+  if (!DB.grades[aId]) DB.grades[aId] = {};
+  if (val === '' || val == null) delete DB.grades[aId][sId];
+  else DB.grades[aId][sId] = Number(val);
+}
+function assignmentsOf(cid){ return DB.assignments.filter(a => a.classId === cid && a.status !== 'Draft'); }
+function studentAvg(sId, cid){
+  let earned = 0, poss = 0;
+  assignmentsOf(cid).forEach(a => { const s = scoreOf(a.id, sId); if (s != null){ earned += s; poss += Number(a.points) || 0; } });
+  return poss ? Math.round((earned / poss) * 100) : null;
+}
+function assignmentAvg(a){
+  const list = studentsOf(a.classId).map(s => scoreOf(a.id, s.id)).filter(v => v != null);
+  if (!list.length || !a.points) return null;
+  return Math.round((list.reduce((x, y) => x + y, 0) / list.length / a.points) * 100);
+}
+function classAvg(cid){
+  const list = studentsOf(cid).map(s => studentAvg(s.id, cid)).filter(v => v != null);
+  return list.length ? Math.round(list.reduce((a, b) => a + b, 0) / list.length) : null;
+}
+function attendanceRecords(cid){
+  return Object.keys(DB.attendance).filter(k => k.split('|')[0] === cid).map(k => ({date:k.split('|')[1], rec:DB.attendance[k]}));
+}
+function studentAttendance(sId, cid){
+  const out = {present:0, absent:0, late:0, excused:0, total:0};
+  attendanceRecords(cid).forEach(r => { const v = r.rec[sId]; if (v){ out[v]++; out.total++; } });
+  out.pct = out.total ? Math.round(((out.present + out.late) / out.total) * 100) : null;
+  return out;
+}
+function classAttendanceRate(cid){
+  let ok = 0, tot = 0;
+  attendanceRecords(cid).forEach(r => Object.values(r.rec).forEach(v => { tot++; if (v === 'present' || v === 'late') ok++; }));
+  return tot ? Math.round((ok / tot) * 100) : null;
+}
+function overallAttendanceRate(){
+  let ok = 0, tot = 0;
+  Object.values(DB.attendance).forEach(rec => Object.values(rec).forEach(v => { tot++; if (v === 'present' || v === 'late') ok++; }));
+  return tot ? Math.round((ok / tot) * 100) : null;
+}
+
+/* =========================================================================
+   5d. CLASSES + STUDENTS
+   ========================================================================= */
+RENDERERS.classes = function(){
+  if (UI.classId && classOf(UI.classId)) return renderClassDetail();
+  let h = pageHead('Classes', 'Your classes', 'Every class you teach, with its students, grades and attendance in one place.',
+    '<button class="btn primary" id="cAdd">' + icon('plus', 14) + 'Add class</button>');
+  h += '<div class="card">';
+  if (!DB.classes.length){
+    h += emptyState('classes', 'No classes yet', 'Add your first class and you can start adding students, lessons and grades to it.', 'Create your first class', 'cAdd2');
+  } else {
+    h += '<div class="grid g3">' + DB.classes.map(c => {
+      const st = studentsOf(c.id), avg = classAvg(c.id), att = classAttendanceRate(c.id);
+      const up = DB.assignments.filter(a => a.classId === c.id && a.due && daysUntil(a.due) >= 0).length;
+      return '<div class="tile"><span class="band" style="background:' + c.color + '"></span>' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">' +
+        '<div><h3>' + esc(c.name) + '</h3><div class="sub">' + esc(c.grade) + ' · ' + esc(c.subject) + '</div></div>' +
+        '<button class="btn tiny no-print" data-cedit="' + c.id + '">' + icon('edit', 12) + '</button></div>' +
+        '<div class="tile-meta"><span>' + esc(c.period || 'No period') + '</span><span>' + (c.room ? 'Room ' + esc(c.room) : 'No room') + '</span></div>' +
+        '<div class="mini-stats"><div><b>' + st.length + '</b>students</div><div><b>' + up + '</b>upcoming</div>' +
+        '<div><b>' + (avg != null ? avg + '%' : '—') + '</b>average</div><div><b>' + (att != null ? att + '%' : '—') + '</b>attendance</div></div>' +
+        '<div class="tile-foot"><span class="chip plain">' + st.length + ' enrolled</span>' +
+        '<button class="btn tiny" data-copen="' + c.id + '">Open class</button></div></div>';
+    }).join('') + '</div>';
+  }
+  h += '</div>';
+  $('#view-classes').innerHTML = h;
+  const add = () => classForm();
+  if ($('#cAdd')) $('#cAdd').onclick = add;
+  if ($('#cAdd2')) $('#cAdd2').onclick = add;
+  $$('[data-cedit]').forEach(b => b.onclick = () => classForm(b.dataset.cedit));
+  $$('[data-copen]').forEach(b => b.onclick = () => { UI.classId = b.dataset.copen; RENDERERS.classes(); });
+};
+
+function renderClassDetail(){
+  const c = classOf(UI.classId), st = studentsOf(c.id);
+  const avg = classAvg(c.id), att = classAttendanceRate(c.id);
+  const up = DB.assignments.filter(a => a.classId === c.id && a.due && daysUntil(a.due) >= 0);
+  let h = pageHead('Class', c.name + ' — ' + c.grade, [c.subject, c.period, c.room ? 'Room ' + c.room : ''].filter(Boolean).join(' · '),
+    '<button class="btn" id="cBack">‹ All classes</button>' +
+    '<button class="btn" id="cEditThis">' + icon('edit', 14) + 'Edit class</button>' +
+    '<button class="btn primary" id="sAdd">' + icon('plus', 14) + 'Add student</button>');
+
+  h += '<div class="grid g4" style="margin-bottom:18px">' + [
+    {l:'Students', v:st.length, f:'Enrolled in this class', i:'users'},
+    {l:'Upcoming work', v:up.length, f:up.length ? 'Next due ' + relative(up.sort((a, b) => a.due.localeCompare(b.due))[0].due) : 'Nothing due', i:'assignments'},
+    {l:'Class average', v:(avg != null ? avg + '%' : '—'), f:assignmentsOf(c.id).length + ' graded items', i:'gradebook'},
+    {l:'Attendance', v:(att != null ? att + '%' : '—'), f:attendanceRecords(c.id).length + ' days recorded', i:'attendance'}
+  ].map(x => '<div class="stat"><div class="top"><span class="label">' + x.l + '</span><span class="ico">' + icon(x.i, 16) + '</span></div>' +
+    '<div class="big num">' + x.v + '</div><div class="foot">' + esc(x.f) + '</div></div>').join('') + '</div>';
+
+  h += '<div class="card"><div class="card-head"><h2>Students</h2><span class="chip">' + st.length + '</span></div>';
+  if (!st.length){
+    h += emptyState('users', 'No students yet', 'Add students to this class to start taking attendance and entering grades.', 'Add your first student', 'sAdd2');
+  } else {
+    h += '<div class="table-wrap"><table><thead><tr><th>Student</th><th>ID</th><th>Email</th><th>Average</th><th>Attendance</th><th class="right">Actions</th></tr></thead><tbody>' +
+      st.map(s => {
+        const a = studentAvg(s.id, c.id), at = studentAttendance(s.id, c.id);
+        return '<tr><td><b>' + esc(fullName(s)) + '</b>' + (s.notes ? '<div class="sub" style="font-size:12px">' + esc(s.notes) + '</div>' : '') + '</td>' +
+          '<td class="num sub">' + esc(s.sid || '—') + '</td><td class="sub">' + esc(s.email || '—') + '</td>' +
+          '<td class="pct' + (a != null && a < 70 ? ' low' : '') + '">' + (a != null ? a + '%' : '—') + '</td>' +
+          '<td class="pct' + (at.pct != null && at.pct < 90 ? ' low' : '') + '">' + (at.pct != null ? at.pct + '%' : '—') + '</td>' +
+          '<td><div class="rowacts no-print"><button class="btn tiny" data-sview="' + s.id + '">Profile</button>' +
+          '<button class="btn tiny" data-sedit="' + s.id + '">' + icon('edit', 12) + '</button></div></td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Assignments in this class</h3><button class="btn sm no-print" data-go-btn="assignments">Open assignments</button></div>';
+  const ca = DB.assignments.filter(a => a.classId === c.id);
+  h += ca.length ? ca.map(a =>
+      '<div class="list-line"><div><div class="ll-t">' + esc(a.name) + '</div><div class="ll-m">' + esc(a.status) + ' · ' + a.points + ' pts · ' +
+      (assignmentAvg(a) != null ? 'average ' + assignmentAvg(a) + '%' : 'not graded') + '</div></div>' +
+      '<span class="chip' + (a.due && daysUntil(a.due) < 0 && a.status !== 'Completed' ? ' clay' : ' plain') + '">' + esc(relative(a.due)) + '</span></div>').join('')
+    : '<p class="sub" style="margin:0">No assignments for this class yet.</p>';
+  h += '</div>';
+
+  $('#view-classes').innerHTML = h;
+  $('#cBack').onclick = () => { UI.classId = null; RENDERERS.classes(); };
+  $('#cEditThis').onclick = () => classForm(c.id);
+  const addS = () => studentForm(null, c.id);
+  if ($('#sAdd')) $('#sAdd').onclick = addS;
+  if ($('#sAdd2')) $('#sAdd2').onclick = addS;
+  $$('[data-sedit]').forEach(b => b.onclick = () => studentForm(b.dataset.sedit));
+  $$('[data-sview]').forEach(b => b.onclick = () => studentProfile(b.dataset.sview));
+  $$('[data-go-btn]').forEach(b => b.onclick = () => go(b.dataset.goBtn));
+}
+
+function classForm(id){
+  const c = id ? classOf(id) : null;
+  openForm({
+    title: c ? 'Edit class' : 'Add class',
+    values: c || {color:CLASS_COLORS[DB.classes.length % CLASS_COLORS.length], grade:DB.settings.defaultGrade, subject:DB.settings.defaultSubject},
+    fields:[
+      {key:'name', label:'Class name', required:true, placeholder:'e.g. Math', half:true},
+      {key:'subject', label:'Subject', half:true, placeholder:'Math'},
+      {key:'grade', label:'Grade', half:true, placeholder:'Grade 5'},
+      {key:'period', label:'Period', half:true, placeholder:'Period 1'},
+      {key:'room', label:'Room', half:true, placeholder:'204'},
+      {key:'color', label:'Colour', type:'color'}
+    ],
+    onSave(v){
+      if (c) Object.assign(c, v);
+      else DB.classes.push(Object.assign({id:uid()}, v));
+      save(); toast(c ? 'Class updated.' : 'Class added.'); RENDERERS.classes();
+    },
+    onDelete: c ? () => {
+      DB.students = DB.students.filter(s => s.classId !== id);
+      DB.assignments = DB.assignments.filter(a => a.classId !== id);
+      DB.schedule = DB.schedule.filter(s => s.classId !== id);
+      DB.classes = DB.classes.filter(x => x.id !== id);
+      UI.classId = null; save(); toast('Class deleted.'); RENDERERS.classes();
+    } : null,
+    deleteMsg:'Deleting this class also removes its students, assignments and schedule.'
+  });
+}
+function studentForm(id, cid){
+  const s = id ? byId(DB.students, id) : null;
+  openForm({
+    title: s ? 'Edit student' : 'Add student',
+    values: s || {classId:cid},
+    fields:[
+      {key:'first', label:'First name', required:true, half:true},
+      {key:'last', label:'Last name', half:true},
+      {key:'classId', label:'Class', type:'select', options:classOptions(), half:true},
+      {key:'sid', label:'Student ID', half:true},
+      {key:'email', label:'Email', type:'email'},
+      {key:'notes', label:'Notes', type:'textarea', rows:3, placeholder:'Seating, supports, anything worth remembering.'}
+    ],
+    onSave(v){
+      if (s) Object.assign(s, v);
+      else DB.students.push(Object.assign({id:uid()}, v));
+      save(); toast(s ? 'Student updated.' : 'Student added.'); RENDERERS.classes();
+    },
+    onDelete: s ? () => { DB.students = DB.students.filter(x => x.id !== id); save(); toast('Student removed.'); RENDERERS.classes(); } : null
+  });
+}
+function studentProfile(id){
+  const s = byId(DB.students, id), cid = s.classId;
+  const at = studentAttendance(id, cid), avg = studentAvg(id, cid);
+  let body = '<div class="grid g3" style="margin-bottom:16px">' + [
+    ['Average', avg != null ? avg + '%' : '—'], ['Attendance', at.pct != null ? at.pct + '%' : '—'], ['Absences', at.absent + at.excused]
+  ].map(x => '<div class="stat" style="padding:14px"><span class="label">' + x[0] + '</span><div class="big num" style="font-size:26px;margin-top:6px">' + x[1] + '</div></div>').join('') + '</div>';
+
+  body += '<h4 style="font-family:var(--sans);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Assignments</h4>';
+  const list = assignmentsOf(cid);
+  body += list.length ? '<div class="table-wrap"><table><thead><tr><th>Assignment</th><th>Score</th><th>Percent</th></tr></thead><tbody>' +
+    list.map(a => {
+      const sc = scoreOf(a.id, id);
+      const p = sc != null && a.points ? Math.round(sc / a.points * 100) : null;
+      return '<tr><td>' + esc(a.name) + '</td><td class="num">' + (sc != null ? sc + ' / ' + a.points : '—') + '</td>' +
+        '<td class="pct' + (p != null && p < 70 ? ' low' : '') + '">' + (p != null ? p + '%' : '—') + '</td></tr>';
+    }).join('') + '</tbody></table></div>' : '<p class="sub">No graded assignments yet.</p>';
+
+  body += '<h4 style="font-family:var(--sans);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px">Attendance breakdown</h4>' +
+    '<p class="sub" style="margin:0">' + at.present + ' present · ' + at.late + ' late · ' + at.absent + ' absent · ' + at.excused + ' excused (' + at.total + ' days recorded)</p>';
+  body += '<h4 style="font-family:var(--sans);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px">Teacher notes</h4>' +
+    '<p style="margin:0;white-space:pre-wrap">' + (s.notes ? esc(s.notes) : '<span class="sub">No notes yet.</span>') + '</p>';
+
+  openModal(fullName(s) + ' · ' + className(cid), body,
+    '<button class="btn" id="pClose">Close</button><button class="btn primary" id="pEdit">' + icon('edit', 13) + 'Edit student</button>', true);
+  $('#pClose').onclick = closeModal;
+  $('#pEdit').onclick = () => { closeModal(); studentForm(id); };
+}
+
+/* =========================================================================
+   5e. ASSIGNMENTS
+   ========================================================================= */
+let aView = 'card';
+RENDERERS.assignments = function(){
+  let h = pageHead('Assignments', 'Assignments', 'Track what you have set, what is coming back, and what still needs grading.',
+    '<div class="seg"><button data-aview="card"' + (aView === 'card' ? ' class="on"' : '') + '>Cards</button><button data-aview="list"' + (aView === 'list' ? ' class="on"' : '') + '>List</button></div>' +
+    '<button class="btn primary" id="aAdd">' + icon('plus', 14) + 'New assignment</button>');
+
+  h += '<div class="card"><div class="toolbar no-print">' +
+    '<select id="aClass"><option value="">All classes</option>' + DB.classes.map(c => '<option value="' + c.id + '">' + esc(c.name) + '</option>').join('') + '</select>' +
+    '<select id="aStatus"><option value="">All statuses</option>' + A_STATUS.map(s => '<option>' + s + '</option>').join('') + '</select>' +
+    '<select id="aDue"><option value="">Any due date</option><option value="overdue">Overdue</option><option value="week">Next 7 days</option><option value="later">Later</option></select>' +
+    '<input type="text" id="aSearch" placeholder="Search assignments…"></div><div id="aList"></div></div>';
+
+  $('#view-assignments').innerHTML = h;
+  renderAssignments();
+  $('#aAdd').onclick = () => assignmentForm();
+  $$('[data-aview]').forEach(b => b.onclick = () => { aView = b.dataset.aview; RENDERERS.assignments(); });
+  ['aClass','aStatus','aDue','aSearch'].forEach(i => $('#' + i).oninput = renderAssignments);
+};
+function renderAssignments(){
+  const fc = $('#aClass').value, fs = $('#aStatus').value, fd = $('#aDue').value, q = $('#aSearch').value.toLowerCase();
+  let list = DB.assignments.filter(a =>
+    (!fc || a.classId === fc) && (!fs || a.status === fs) &&
+    (!q || (a.name + ' ' + a.description).toLowerCase().includes(q)));
+  if (fd === 'overdue') list = list.filter(a => a.due && daysUntil(a.due) < 0 && a.status !== 'Completed');
+  if (fd === 'week') list = list.filter(a => a.due && daysUntil(a.due) >= 0 && daysUntil(a.due) <= 7);
+  if (fd === 'later') list = list.filter(a => a.due && daysUntil(a.due) > 7);
+  list.sort((a, b) => (a.due || '9999').localeCompare(b.due || '9999'));
+
+  const box = $('#aList');
+  if (!DB.assignments.length){
+    box.innerHTML = emptyState('assignments', 'No assignments yet', 'Add an assignment and it will appear on your calendar, dashboard and gradebook automatically.', 'Create your first assignment', 'aAdd2');
+    $('#aAdd2').onclick = () => assignmentForm();
+    return;
+  }
+  if (!list.length){ box.innerHTML = '<p class="sub" style="margin:0">Nothing matches those filters.</p>'; return; }
+
+  if (aView === 'list'){
+    box.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Assignment</th><th>Class</th><th>Due</th><th>Points</th><th>Average</th><th>Status</th><th class="right">Edit</th></tr></thead><tbody>' +
+      list.map(a => {
+        const over = a.due && daysUntil(a.due) < 0 && a.status !== 'Completed';
+        const av = assignmentAvg(a);
+        return '<tr><td><b>' + esc(a.name) + '</b></td><td class="sub">' + esc(className(a.classId)) + '</td>' +
+          '<td class="' + (over ? 'overdue' : '') + '">' + esc(relative(a.due)) + '</td><td class="num">' + a.points + '</td>' +
+          '<td class="pct">' + (av != null ? av + '%' : '—') + '</td><td><span class="chip plain">' + esc(a.status) + '</span></td>' +
+          '<td><div class="rowacts no-print"><button class="btn tiny" data-aedit="' + a.id + '">' + icon('edit', 12) + '</button></div></td></tr>';
+      }).join('') + '</tbody></table></div>';
+  } else {
+    box.innerHTML = '<div class="grid g3">' + list.map(a => {
+      const over = a.due && daysUntil(a.due) < 0 && a.status !== 'Completed';
+      const av = assignmentAvg(a);
+      return '<div class="tile"><span class="band" style="background:' + classColor(a.classId) + '"></span>' +
+        '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3>' + esc(a.name) + '</h3>' +
+        '<button class="btn tiny no-print" data-aedit="' + a.id + '">' + icon('edit', 12) + '</button></div>' +
+        '<div class="sub">' + esc(className(a.classId)) + ' · ' + a.points + ' points</div>' +
+        (a.description ? '<p style="font-size:13px;margin:10px 0 0;color:var(--muted)">' + esc(a.description) + '</p>' : '') +
+        '<div class="tile-foot"><span class="chip' + (over ? ' clay' : ' plain') + '">' + (over ? 'Overdue · ' : 'Due ') + esc(relative(a.due)) + '</span>' +
+        '<span class="chip">' + esc(a.status) + (av != null ? ' · ' + av + '%' : '') + '</span></div></div>';
+    }).join('') + '</div>';
+  }
+  $$('[data-aedit]').forEach(b => b.onclick = () => assignmentForm(b.dataset.aedit));
+}
+function assignmentForm(id){
+  const a = id ? byId(DB.assignments, id) : null;
+  if (!DB.classes.length && !a){ toast('Create a class first.'); go('classes'); return; }
+  openForm({
+    title: a ? 'Edit assignment' : 'New assignment',
+    values: a || {assigned:TODAY(), due:shiftDay(7), points:20, status:'Assigned', classId:(DB.classes[0] || {}).id, subject:DB.settings.defaultSubject},
+    fields:[
+      {key:'name', label:'Assignment name', required:true, placeholder:'e.g. Fractions Quiz'},
+      {key:'classId', label:'Class', type:'select', options:classOptions(), half:true},
+      {key:'subject', label:'Subject', half:true},
+      {key:'assigned', label:'Date assigned', type:'date', half:true},
+      {key:'due', label:'Due date', type:'date', half:true},
+      {key:'points', label:'Points possible', type:'number', half:true},
+      {key:'status', label:'Status', type:'select', options:A_STATUS, half:true},
+      {key:'description', label:'Description', type:'textarea', rows:3}
+    ],
+    onSave(v){
+      if (a) Object.assign(a, v);
+      else DB.assignments.push(Object.assign({id:uid()}, v));
+      save(); toast(a ? 'Assignment updated.' : 'Assignment added.');
+      if (UI.view === 'calendar') RENDERERS.calendar(); else RENDERERS.assignments();
+    },
+    onDelete: a ? () => { DB.assignments = DB.assignments.filter(x => x.id !== id); delete DB.grades[id]; save(); toast('Assignment deleted.'); RENDERERS.assignments(); } : null
+  });
+}
+
+/* =========================================================================
+   5f. GRADEBOOK
+   ========================================================================= */
+RENDERERS.gradebook = function(){
+  if (!UI.gradeClass || !classOf(UI.gradeClass)) UI.gradeClass = (DB.classes[0] || {}).id || null;
+  let h = pageHead('Gradebook', 'Gradebook', 'Type a score and every average updates itself.',
+    '<button class="btn" id="gPrint">' + icon('print', 14) + 'Print</button>');
+
+  if (!DB.classes.length){
+    h += '<div class="card">' + emptyState('gradebook', 'No classes to grade', 'Create a class and add a few students — the gradebook builds itself from your assignments.', 'Go to classes', 'gGo') + '</div>';
+    $('#view-gradebook').innerHTML = h;
+    $('#gGo').onclick = () => go('classes');
+    return;
+  }
+  h += '<div class="card"><div class="toolbar no-print"><select id="gClass">' +
+    DB.classes.map(c => '<option value="' + c.id + '"' + (c.id === UI.gradeClass ? ' selected' : '') + '>' + esc(c.name + ' — ' + c.grade) + '</option>').join('') +
+    '</select><span class="sub" id="gInfo"></span></div><div id="gTable"></div></div>';
+  h += '<div class="card"><div class="card-head"><h3>Class performance</h3><div class="sub">Average score per assignment</div></div><div id="gChart"></div></div>';
+
+  $('#view-gradebook').innerHTML = h;
+  renderGradebook();
+  $('#gClass').onchange = () => { UI.gradeClass = $('#gClass').value; renderGradebook(); };
+  $('#gPrint').onclick = () => window.print();
+};
+function renderGradebook(){
+  const cid = UI.gradeClass, st = studentsOf(cid), list = assignmentsOf(cid);
+  const box = $('#gTable');
+  $('#gInfo').textContent = st.length + ' students · ' + list.length + ' graded items · class average ' + (classAvg(cid) != null ? classAvg(cid) + '%' : '—');
+  if (!st.length){
+    box.innerHTML = emptyState('users', 'No students in this class', 'Add students from the Classes page and they will show up here.', 'Go to classes', 'gGo2');
+    $('#gGo2').onclick = () => { UI.classId = cid; go('classes'); };
+    $('#gChart').innerHTML = '';
+    return;
+  }
+  if (!list.length){
+    box.innerHTML = emptyState('assignments', 'Nothing to grade yet', 'Assignments show up here as soon as they leave draft status.', 'Create an assignment', 'gGo3');
+    $('#gGo3').onclick = () => assignmentForm();
+    $('#gChart').innerHTML = '';
+    return;
+  }
+  box.innerHTML = '<div class="table-wrap"><table><thead><tr><th style="min-width:150px">Student</th>' +
+    list.map(a => '<th style="text-align:center">' + esc(a.name) + '<div style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">' + a.points + ' pts</div></th>').join('') +
+    '<th style="text-align:center">Average</th></tr></thead><tbody>' +
+    st.map(s => {
+      const avg = studentAvg(s.id, cid);
+      return '<tr><td><b>' + esc(fullName(s)) + '</b></td>' + list.map(a =>
+        '<td style="text-align:center"><input class="gradecell" type="number" min="0" max="' + a.points + '" data-g="' + a.id + '|' + s.id + '" value="' + (scoreOf(a.id, s.id) != null ? scoreOf(a.id, s.id) : '') + '" placeholder="—"></td>').join('') +
+        '<td style="text-align:center" class="pct' + (avg != null && avg < 70 ? ' low' : '') + '">' + (avg != null ? avg + '%' : '—') + '</td></tr>';
+    }).join('') +
+    '<tr><td><b>Class average</b></td>' + list.map(a => '<td style="text-align:center" class="pct">' + (assignmentAvg(a) != null ? assignmentAvg(a) + '%' : '—') + '</td>').join('') +
+    '<td style="text-align:center" class="pct"><b>' + (classAvg(cid) != null ? classAvg(cid) + '%' : '—') + '</b></td></tr>' +
+    '</tbody></table></div>';
+
+  $$('[data-g]').forEach(inp => inp.onchange = () => {
+    const [aId, sId] = inp.dataset.g.split('|');
+    const a = byId(DB.assignments, aId);
+    let v = inp.value === '' ? '' : Math.max(0, Math.min(Number(a.points), Number(inp.value)));
+    if (v !== '') inp.value = v;
+    setScore(aId, sId, v);
+    save(); toast('Grade saved.'); renderGradebook();
+  });
+
+  $('#gChart').innerHTML = barChart(list.map(a => ({label:a.name, value:assignmentAvg(a) || 0, suffix:'%'})));
+}
+function barChart(data, alt){
+  const max = Math.max(100, ...data.map(d => d.value));
+  return '<div class="chart">' + data.map(d =>
+    '<div class="bar-wrap"><span class="bar-val">' + d.value + (d.suffix || '') + '</span>' +
+    '<div class="bar' + (alt ? ' alt' : '') + '" style="height:' + Math.max(3, (d.value / max) * 120) + 'px"></div>' +
+    '<span class="bar-lbl">' + esc(d.label) + '</span></div>').join('') + '</div>';
+}
+
+/* =========================================================================
+   5g. ATTENDANCE
+   ========================================================================= */
+const ATT_STATES = [['present','Present'],['absent','Absent'],['late','Late'],['excused','Excused']];
+RENDERERS.attendance = function(){
+  if (!UI.attClass || !classOf(UI.attClass)) UI.attClass = (DB.classes[0] || {}).id || null;
+  let h = pageHead('Attendance', 'Attendance', 'Tap a status for each student. Totals update as you go.',
+    '<button class="btn" id="atAll">Mark all present</button><button class="btn" id="atPrint">' + icon('print', 14) + 'Print</button>');
+  if (!DB.classes.length){
+    h += '<div class="card">' + emptyState('attendance', 'No classes yet', 'Attendance follows your class lists — create a class to get started.', 'Go to classes', 'atGo') + '</div>';
+    $('#view-attendance').innerHTML = h;
+    $('#atGo').onclick = () => go('classes');
+    return;
+  }
+  h += '<div class="card"><div class="toolbar no-print"><select id="atClass">' +
+    DB.classes.map(c => '<option value="' + c.id + '"' + (c.id === UI.attClass ? ' selected' : '') + '>' + esc(c.name + ' — ' + c.grade) + '</option>').join('') +
+    '</select><input type="date" id="atDate" value="' + UI.attDate + '"></div><div id="atTable"></div></div>';
+  h += '<div class="card"><div class="card-head"><h3>Monthly summary</h3><div class="sub" id="atMonthLabel"></div></div><div id="atMonth"></div></div>';
+
+  $('#view-attendance').innerHTML = h;
+  renderAttendance();
+  $('#atClass').onchange = () => { UI.attClass = $('#atClass').value; renderAttendance(); };
+  $('#atDate').onchange = () => { UI.attDate = $('#atDate').value || TODAY(); renderAttendance(); };
+  $('#atPrint').onclick = () => window.print();
+  $('#atAll').onclick = () => {
+    const key = UI.attClass + '|' + UI.attDate;
+    DB.attendance[key] = DB.attendance[key] || {};
+    studentsOf(UI.attClass).forEach(s => DB.attendance[key][s.id] = 'present');
+    save(); toast('Attendance updated.'); renderAttendance();
+  };
+};
+function renderAttendance(){
+  const cid = UI.attClass, iso = UI.attDate, key = cid + '|' + iso;
+  const st = studentsOf(cid), rec = DB.attendance[key] || {};
+  const box = $('#atTable');
+  if (!st.length){
+    box.innerHTML = emptyState('users', 'No students in this class', 'Add students to take attendance.', 'Go to classes', 'atGo2');
+    $('#atGo2').onclick = () => { UI.classId = cid; go('classes'); };
+    $('#atMonth').innerHTML = '';
+    return;
+  }
+  const counts = {present:0, absent:0, late:0, excused:0};
+  st.forEach(s => { if (rec[s.id]) counts[rec[s.id]]++; });
+  const marked = Object.values(counts).reduce((a, b) => a + b, 0);
+  const pct = marked ? Math.round(((counts.present + counts.late) / marked) * 100) : null;
+
+  let h = '<div class="grid g4" style="margin-bottom:16px">' + [
+    ['Present today', counts.present + ' / ' + st.length], ['Attendance rate', pct != null ? pct + '%' : '—'],
+    ['Absent', counts.absent + counts.excused], ['Late', counts.late]
+  ].map(x => '<div class="stat" style="padding:14px"><span class="label">' + x[0] + '</span><div class="big num" style="font-size:24px;margin-top:6px">' + x[1] + '</div></div>').join('') + '</div>';
+
+  h += '<div class="sub" style="margin-bottom:10px">' + fmtDate(iso, true) + ' · ' + className(cid) + '</div>';
+  h += '<div class="table-wrap"><table><thead><tr><th>Student</th><th>Status</th><th>Term rate</th><th class="right">Absences</th></tr></thead><tbody>' +
+    st.map(s => {
+      const at = studentAttendance(s.id, cid);
+      return '<tr><td><b>' + esc(fullName(s)) + '</b></td><td><div class="att-set">' +
+        ATT_STATES.map(([v, l]) => '<button class="att-btn' + (rec[s.id] === v ? ' on' : '') + '" data-s="' + v + '" data-att="' + s.id + '|' + v + '">' + l + '</button>').join('') +
+        '</div></td><td class="pct' + (at.pct != null && at.pct < 90 ? ' low' : '') + '">' + (at.pct != null ? at.pct + '%' : '—') + '</td>' +
+        '<td class="right num">' + (at.absent + at.excused) + (at.late ? ' · ' + at.late + ' late' : '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+  box.innerHTML = h;
+
+  $$('[data-att]').forEach(b => b.onclick = () => {
+    const [sid, v] = b.dataset.att.split('|');
+    DB.attendance[key] = DB.attendance[key] || {};
+    if (DB.attendance[key][sid] === v) delete DB.attendance[key][sid];
+    else DB.attendance[key][sid] = v;
+    save(); renderAttendance();
+  });
+
+  /* monthly summary */
+  const m = iso.slice(0, 7);
+  const days = attendanceRecords(cid).filter(r => r.date.startsWith(m)).sort((a, b) => a.date.localeCompare(b.date));
+  $('#atMonthLabel').textContent = MONTHS[Number(m.slice(5, 7)) - 1] + ' ' + m.slice(0, 4) + ' · ' + days.length + ' days recorded';
+  $('#atMonth').innerHTML = days.length
+    ? '<div class="table-wrap"><table><thead><tr><th>Student</th>' + days.map(d => '<th style="text-align:center">' + dateObj(d.date).getDate() + '</th>').join('') + '<th style="text-align:center">Rate</th></tr></thead><tbody>' +
+      st.map(s => {
+        let ok = 0;
+        const cells = days.map(d => {
+          const v = d.rec[s.id];
+          if (v === 'present' || v === 'late') ok++;
+          const mark = v === 'present' ? '●' : v === 'absent' ? '✕' : v === 'late' ? 'L' : v === 'excused' ? 'E' : '·';
+          const col = v === 'absent' ? 'var(--clay)' : v === 'late' ? '#C9A227' : v === 'excused' ? '#7E8FA6' : 'var(--accent)';
+          return '<td style="text-align:center;color:' + (v ? col : 'var(--muted)') + '">' + mark + '</td>';
+        }).join('');
+        const p = Math.round(ok / days.length * 100);
+        return '<tr><td>' + esc(fullName(s)) + '</td>' + cells + '<td style="text-align:center" class="pct' + (p < 90 ? ' low' : '') + '">' + p + '%</td></tr>';
+      }).join('') + '</tbody></table></div>'
+    : '<p class="sub" style="margin:0">No attendance recorded this month yet.</p>';
+}
+</script>
+<script>
+/* =========================================================================
+   5h. TO-DO
+   ========================================================================= */
+RENDERERS.todo = function(){
+  const filters = ['All','Today','Upcoming','Completed'];
+  let h = pageHead('To-do', 'Tasks', 'Everything off your mind and onto one list.',
+    '<button class="btn primary" id="tAdd">' + icon('plus', 14) + 'New task</button>');
+  h += '<div class="card"><div class="toolbar no-print"><div class="seg">' +
+    filters.map(f => '<button data-tfilter="' + f + '"' + (UI.taskFilter === f ? ' class="on"' : '') + '>' + f + '</button>').join('') + '</div>' +
+    '<select id="tCat"><option value="">All categories</option>' + TASK_CATS.map(c => '<option>' + c + '</option>').join('') + '</select>' +
+    '<select id="tPri"><option value="">Any priority</option><option>High</option><option>Medium</option><option>Low</option></select></div>';
+  h += '<div id="tList"></div>';
+  h += '<div class="quickadd no-print"><input type="text" id="tQuick" placeholder="Add a task…"><button class="btn primary" id="tQuickAdd">' + icon('plus', 14) + '</button></div></div>';
+  $('#view-todo').innerHTML = h;
+  renderTasks();
+  $('#tAdd').onclick = () => taskForm();
+  $$('[data-tfilter]').forEach(b => b.onclick = () => { UI.taskFilter = b.dataset.tfilter; RENDERERS.todo(); });
+  ['tCat','tPri'].forEach(i => $('#' + i).onchange = renderTasks);
+  const q = () => {
+    const v = $('#tQuick').value.trim();
+    if (!v) return;
+    DB.tasks.unshift({id:uid(), title:v, due:TODAY(), priority:'Medium', cat:'Planning', notes:'', done:false});
+    $('#tQuick').value = ''; save(); toast('Task added.'); renderTasks();
+  };
+  $('#tQuickAdd').onclick = q;
+  $('#tQuick').onkeydown = e => { if (e.key === 'Enter') q(); };
+};
+function renderTasks(){
+  const cat = $('#tCat') ? $('#tCat').value : '', pri = $('#tPri') ? $('#tPri').value : '';
+  let list = DB.tasks.filter(t => (!cat || t.cat === cat) && (!pri || t.priority === pri));
+  if (UI.taskFilter === 'Today') list = list.filter(t => !t.done && t.due && daysUntil(t.due) <= 0);
+  if (UI.taskFilter === 'Upcoming') list = list.filter(t => !t.done && t.due && daysUntil(t.due) > 0);
+  if (UI.taskFilter === 'Completed') list = list.filter(t => t.done);
+  if (UI.taskFilter === 'All') list = list.filter(t => !t.done).concat(list.filter(t => t.done));
+
+  const box = $('#tList');
+  if (!DB.tasks.length){
+    box.innerHTML = emptyState('todo', 'Your list is empty', 'Add the first thing on your mind — it will show up on your dashboard too.', 'Add a task', 'tAdd2');
+    $('#tAdd2').onclick = () => taskForm();
+    return;
+  }
+  if (!list.length){ box.innerHTML = '<p class="sub" style="margin:0">Nothing here. Try another filter.</p>'; return; }
+  box.innerHTML = list.map(t => '<div draggable="true" data-drag="' + t.id + '">' + taskLine(t) + '</div>').join('');
+  wireTaskLines(box);
+
+  /* drag to reorder */
+  let dragId = null;
+  $$('[data-drag]', box).forEach(row => {
+    row.addEventListener('dragstart', () => { dragId = row.dataset.drag; row.style.opacity = '.45'; });
+    row.addEventListener('dragend', () => { row.style.opacity = ''; });
+    row.addEventListener('dragover', e => { e.preventDefault(); row.style.borderTop = '2px solid var(--accent)'; });
+    row.addEventListener('dragleave', () => { row.style.borderTop = ''; });
+    row.addEventListener('drop', e => {
+      e.preventDefault(); row.style.borderTop = '';
+      const targetId = row.dataset.drag;
+      if (!dragId || dragId === targetId) return;
+      const from = DB.tasks.findIndex(x => x.id === dragId);
+      const item = DB.tasks.splice(from, 1)[0];
+      const to = DB.tasks.findIndex(x => x.id === targetId);
+      DB.tasks.splice(to, 0, item);
+      save(); renderTasks();
+    });
+  });
+}
+function taskForm(id){
+  const t = id ? byId(DB.tasks, id) : null;
+  openForm({
+    title: t ? 'Edit task' : 'New task',
+    values: t || {due:TODAY(), priority:'Medium', cat:'Planning'},
+    fields:[
+      {key:'title', label:'Task', required:true, placeholder:'What needs doing?'},
+      {key:'due', label:'Due date', type:'date', half:true},
+      {key:'priority', label:'Priority', type:'select', options:['Low','Medium','High'], half:true},
+      {key:'cat', label:'Category', type:'select', options:TASK_CATS, half:true},
+      {key:'notes', label:'Notes', type:'textarea', rows:3}
+    ],
+    onSave(v){
+      if (t) Object.assign(t, v); else DB.tasks.unshift(Object.assign({id:uid(), done:false}, v));
+      save(); toast(t ? 'Task updated.' : 'Task added.');
+      if (UI.view === 'todo') renderTasks(); else RENDERERS.dashboard();
+    },
+    onDelete: t ? () => { DB.tasks = DB.tasks.filter(x => x.id !== id); save(); toast('Task deleted.'); (UI.view === 'todo' ? renderTasks() : RENDERERS.dashboard()); } : null
+  });
+}
+
+/* =========================================================================
+   5i. GOALS
+   ========================================================================= */
+RENDERERS.goals = function(){
+  let h = pageHead('Goals', 'Goals', 'The year-long work, broken into milestones you can actually tick off.',
+    '<button class="btn primary" id="goAdd">' + icon('plus', 14) + 'New goal</button>');
+  const school = DB.goals.filter(g => !g.studentId);
+  const student = DB.goals.filter(g => g.studentId);
+
+  h += '<div class="card"><div class="card-head"><h2>School year goals</h2><span class="chip">' + school.length + '</span></div>';
+  h += school.length ? '<div class="grid g2">' + school.map(goalCard).join('') + '</div>'
+    : emptyState('goals', 'No goals set yet', 'Name one thing you want to be true by the end of the year, then break it into milestones.', 'Set your first goal', 'goAdd2');
+  h += '</div>';
+
+  h += '<div class="card"><div class="card-head"><h2>Student goals</h2><span class="chip">' + student.length + '</span></div>';
+  h += student.length ? '<div class="grid g2">' + student.map(goalCard).join('') + '</div>'
+    : '<p class="sub" style="margin:0">Connect a goal to a student to track individual progress here.</p>';
+  h += '</div>';
+
+  $('#view-goals').innerHTML = h;
+  const add = () => goalForm();
+  $('#goAdd').onclick = add;
+  if ($('#goAdd2')) $('#goAdd2').onclick = add;
+  $$('[data-gedit]').forEach(b => b.onclick = () => goalForm(b.dataset.gedit));
+  $$('[data-ms]').forEach(cb => cb.onchange = () => {
+    const [gid, i] = cb.dataset.ms.split('|');
+    const g = byId(DB.goals, gid);
+    g.milestones[+i].done = cb.checked;
+    const done = g.milestones.filter(m => m.done).length;
+    g.progress = Math.round(done / g.milestones.length * 100);
+    save(); RENDERERS.goals();
+  });
+};
+function goalCard(g){
+  const who = g.studentId ? byId(DB.students, g.studentId) : null;
+  return '<div class="tile" style="margin:0"><span class="band"></span>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">' +
+    '<div><h3>' + esc(g.title) + '</h3><div class="sub">' + (who ? esc(fullName(who)) + ' · ' : '') + (g.deadline ? 'By ' + esc(fmtDate(g.deadline)) : 'No deadline') + '</div></div>' +
+    '<button class="btn tiny no-print" data-gedit="' + g.id + '">' + icon('edit', 12) + '</button></div>' +
+    (g.desc ? '<p style="font-size:13px;color:var(--muted);margin:10px 0 0">' + esc(g.desc) + '</p>' : '') +
+    '<div style="margin:14px 0 6px;display:flex;justify-content:space-between;font-size:12.5px"><span class="sub">Progress</span><b class="num">' + (g.progress || 0) + '%</b></div>' +
+    '<div class="progress"><span style="width:' + (g.progress || 0) + '%"></span></div>' +
+    (g.milestones && g.milestones.length ? '<div style="margin-top:12px">' + g.milestones.map((m, i) =>
+      '<label class="mat"><input type="checkbox" data-ms="' + g.id + '|' + i + '"' + (m.done ? ' checked' : '') + '><span style="' + (m.done ? 'color:var(--muted);text-decoration:line-through' : '') + '">' + esc(m.t) + '</span></label>').join('') + '</div>' : '') +
+    '</div>';
+}
+function goalForm(id){
+  const g = id ? byId(DB.goals, id) : null;
+  openForm({
+    title: g ? 'Edit goal' : 'New goal',
+    values: g ? Object.assign({}, g, {ms:(g.milestones || []).map(m => m.t).join('\n')}) : {deadline:shiftDay(60), progress:0},
+    fields:[
+      {key:'title', label:'Goal', required:true, placeholder:'e.g. Increase student participation'},
+      {key:'desc', label:'Description', type:'textarea', rows:2},
+      {key:'deadline', label:'Deadline', type:'date', half:true},
+      {key:'progress', label:'Progress %', type:'number', half:true},
+      {key:'studentId', label:'Connect to a student', type:'select', options:[{v:'', l:'— Whole class / personal —'}].concat(DB.students.map(s => ({v:s.id, l:fullName(s) + ' — ' + className(s.classId)})))},
+      {key:'ms', label:'Milestones', hint:'one per line', type:'textarea', rows:4, placeholder:'Baseline check\nMid-point review\nFinal reflection'}
+    ],
+    onSave(v){
+      const old = g ? g.milestones || [] : [];
+      const milestones = v.ms.split('\n').map(t => t.trim()).filter(Boolean).map(t => {
+        const prev = old.find(m => m.t === t);
+        return {t:t, done:prev ? prev.done : false};
+      });
+      const data = {title:v.title, desc:v.desc, deadline:v.deadline, progress:Math.max(0, Math.min(100, Number(v.progress) || 0)), studentId:v.studentId, milestones:milestones};
+      if (g) Object.assign(g, data); else DB.goals.push(Object.assign({id:uid()}, data));
+      save(); toast(g ? 'Goal updated.' : 'Goal added.'); RENDERERS.goals();
+    },
+    onDelete: g ? () => { DB.goals = DB.goals.filter(x => x.id !== id); save(); toast('Goal deleted.'); RENDERERS.goals(); } : null
+  });
+}
+
+/* =========================================================================
+   5j. RESOURCES
+   ========================================================================= */
+RENDERERS.resources = function(){
+  let h = pageHead('Resources', 'Resource library', 'The links, worksheets and ideas you keep hunting for — saved once.',
+    '<button class="btn primary" id="rAdd">' + icon('plus', 14) + 'Add resource</button>');
+  h += '<div class="card"><div class="toolbar no-print"><input type="text" id="rSearch" placeholder="Search resources…">' +
+    '<select id="rCat"><option value="">All categories</option>' + RES_CATS.map(c => '<option>' + c + '</option>').join('') + '</select></div><div id="rList"></div></div>';
+  $('#view-resources').innerHTML = h;
+  renderResources();
+  $('#rAdd').onclick = () => resourceForm();
+  ['rSearch','rCat'].forEach(i => $('#' + i).oninput = renderResources);
+};
+function renderResources(){
+  const q = $('#rSearch').value.toLowerCase(), cat = $('#rCat').value;
+  const list = DB.resources.filter(r => (!cat || r.category === cat) &&
+    (!q || (r.title + ' ' + r.description + ' ' + r.tags).toLowerCase().includes(q)));
+  const box = $('#rList');
+  if (!DB.resources.length){
+    box.innerHTML = emptyState('resources', 'Nothing saved yet', 'Save a link, a worksheet or an idea and it stays here for the rest of the year.', 'Add your first resource', 'rAdd2');
+    $('#rAdd2').onclick = () => resourceForm();
+    return;
+  }
+  if (!list.length){ box.innerHTML = '<p class="sub" style="margin:0">No resources match that search.</p>'; return; }
+  box.innerHTML = '<div class="grid g3">' + list.map(r =>
+    '<div class="tile"><span class="band" style="background:var(--clay)"></span>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3>' + esc(r.title) + '</h3>' +
+    '<button class="btn tiny no-print" data-redit="' + r.id + '">' + icon('edit', 12) + '</button></div>' +
+    '<div class="sub">' + esc(r.category) + '</div>' +
+    (r.description ? '<p style="font-size:13px;color:var(--muted);margin:10px 0 0">' + esc(r.description) + '</p>' : '') +
+    (r.tags ? '<div class="tags">' + r.tags.split(',').map(t => t.trim()).filter(Boolean).map(t => '<span class="tag">' + esc(t) + '</span>').join('') + '</div>' : '') +
+    (r.url ? '<div class="tile-foot"><span class="sub" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(r.url.replace(/^https?:\/\//, '')) + '</span>' +
+      '<a class="btn tiny" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + icon('link', 12) + 'Open</a></div>' : '') +
+    '</div>').join('') + '</div>';
+  $$('[data-redit]').forEach(b => b.onclick = () => resourceForm(b.dataset.redit));
+}
+function resourceForm(id){
+  const r = id ? byId(DB.resources, id) : null;
+  openForm({
+    title: r ? 'Edit resource' : 'Add resource',
+    values: r || {category:'Other'},
+    fields:[
+      {key:'title', label:'Title', required:true},
+      {key:'category', label:'Category', type:'select', options:RES_CATS, half:true},
+      {key:'url', label:'Link', type:'url', half:true, placeholder:'https://'},
+      {key:'description', label:'Description', type:'textarea', rows:3},
+      {key:'tags', label:'Tags', hint:'comma separated', placeholder:'fractions, printable'}
+    ],
+    onSave(v){
+      if (r) Object.assign(r, v); else DB.resources.unshift(Object.assign({id:uid()}, v));
+      save(); toast(r ? 'Resource updated.' : 'Resource saved.'); RENDERERS.resources();
+    },
+    onDelete: r ? () => { DB.resources = DB.resources.filter(x => x.id !== id); save(); toast('Resource deleted.'); RENDERERS.resources(); } : null
+  });
+}
+
+/* =========================================================================
+   5k. NOTES
+   ========================================================================= */
+RENDERERS.notes = function(){
+  let h = pageHead('Notes', 'Notes', 'Student observations, meeting notes and half-formed ideas.',
+    '<button class="btn primary" id="nAdd">' + icon('plus', 14) + 'New note</button>');
+  h += '<div class="card"><div class="toolbar no-print"><input type="text" id="nSearch" placeholder="Search notes…">' +
+    '<select id="nCat"><option value="">All categories</option>' + NOTE_CATS.map(c => '<option>' + c + '</option>').join('') + '</select></div><div id="nList"></div></div>';
+  $('#view-notes').innerHTML = h;
+  renderNotes();
+  $('#nAdd').onclick = () => noteForm();
+  ['nSearch','nCat'].forEach(i => $('#' + i).oninput = renderNotes);
+};
+function renderNotes(){
+  const q = $('#nSearch').value.toLowerCase(), cat = $('#nCat').value;
+  const list = DB.notes.filter(n => (!cat || n.category === cat) && (!q || (n.title + ' ' + n.content).toLowerCase().includes(q)))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const box = $('#nList');
+  if (!DB.notes.length){
+    box.innerHTML = emptyState('notes', 'No notes yet', 'Write down what you will want to remember at conference time.', 'Write your first note', 'nAdd2');
+    $('#nAdd2').onclick = () => noteForm();
+    return;
+  }
+  if (!list.length){ box.innerHTML = '<p class="sub" style="margin:0">No notes match that search.</p>'; return; }
+  box.innerHTML = '<div class="grid g3">' + list.map(n =>
+    '<div class="tile"><span class="band"></span>' +
+    '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3>' + esc(n.title) + '</h3>' +
+    '<button class="btn tiny no-print" data-nedit="' + n.id + '">' + icon('edit', 12) + '</button></div>' +
+    '<div class="sub">' + esc(n.category) + ' · ' + esc(fmtDate(n.date)) + '</div>' +
+    '<p style="font-size:13.5px;margin:10px 0 0;white-space:pre-wrap">' + esc(n.content) + '</p></div>').join('') + '</div>';
+  $$('[data-nedit]').forEach(b => b.onclick = () => noteForm(b.dataset.nedit));
+}
+function noteForm(id){
+  const n = id ? byId(DB.notes, id) : null;
+  openForm({
+    title: n ? 'Edit note' : 'New note',
+    values: n || {date:TODAY(), category:'Lesson Ideas'},
+    fields:[
+      {key:'title', label:'Title', required:true},
+      {key:'category', label:'Category', type:'select', options:NOTE_CATS, half:true},
+      {key:'date', label:'Date', type:'date', half:true},
+      {key:'content', label:'Note', type:'textarea', rows:7}
+    ],
+    onSave(v){
+      if (n) Object.assign(n, v); else DB.notes.unshift(Object.assign({id:uid()}, v));
+      save(); toast(n ? 'Note updated.' : 'Note saved.'); RENDERERS.notes();
+    },
+    onDelete: n ? () => { DB.notes = DB.notes.filter(x => x.id !== id); save(); toast('Note deleted.'); RENDERERS.notes(); } : null
+  });
+}
+
+/* =========================================================================
+   5l. REPORTS
+   ========================================================================= */
+RENDERERS.reports = function(){
+  const totalStudents = DB.students.length;
+  const graded = DB.assignments.filter(a => assignmentAvg(a) != null);
+  const overallAvg = graded.length ? Math.round(graded.reduce((s, a) => s + assignmentAvg(a), 0) / graded.length) : null;
+  const attRate = overallAttendanceRate();
+
+  let h = pageHead('Reports', 'Your year so far', 'A read on the whole class list, pulled from what you have already entered.',
+    '<button class="btn" id="repPrint">' + icon('print', 14) + 'Print report</button>');
+
+  h += '<div class="grid g3" style="margin-bottom:18px">' + [
+    {l:'Classes', v:DB.classes.length, f:DB.schedule.length + ' periods a week', i:'classes'},
+    {l:'Students', v:totalStudents, f:'Across all classes', i:'users'},
+    {l:'Lessons planned', v:DB.lessons.length, f:uniq(DB.lessons.map(l => l.unit)).length + ' units', i:'lessons'},
+    {l:'Assignments', v:DB.assignments.length, f:DB.assignments.filter(a => a.status === 'Completed').length + ' completed', i:'assignments'},
+    {l:'Average grade', v:(overallAvg != null ? overallAvg + '%' : '—'), f:graded.length + ' graded items', i:'gradebook'},
+    {l:'Attendance rate', v:(attRate != null ? attRate + '%' : '—'), f:Object.keys(DB.attendance).length + ' class days recorded', i:'attendance'}
+  ].map(x => '<div class="stat"><div class="top"><span class="label">' + x.l + '</span><span class="ico">' + icon(x.i, 16) + '</span></div>' +
+    '<div class="big num">' + x.v + '</div><div class="foot">' + esc(x.f) + '</div></div>').join('') + '</div>';
+
+  /* grades over time */
+  const byDate = DB.assignments.filter(a => assignmentAvg(a) != null && a.due).sort((a, b) => a.due.localeCompare(b.due));
+  h += '<div class="grid g2">';
+  h += '<div class="card" style="margin:0"><div class="card-head"><h3>Grades over time</h3><div class="sub">Class average per assignment</div></div>' +
+    (byDate.length ? barChart(byDate.map(a => ({label:fmtShort(a.due), value:assignmentAvg(a), suffix:'%'})))
+      : '<p class="sub" style="margin:0">Enter a few grades to see this chart.</p>') + '</div>';
+
+  /* attendance per class */
+  h += '<div class="card" style="margin:0"><div class="card-head"><h3>Attendance by class</h3><div class="sub">Present or late, all recorded days</div></div>' +
+    (DB.classes.length ? barChart(DB.classes.map(c => ({label:c.name, value:classAttendanceRate(c.id) || 0, suffix:'%'})), true)
+      : '<p class="sub" style="margin:0">No classes yet.</p>') + '</div>';
+
+  /* assignment completion */
+  h += '<div class="card" style="margin:0"><div class="card-head"><h3>Assignment status</h3><div class="sub">Where your assignments sit right now</div></div>' +
+    (DB.assignments.length ? barChart(A_STATUS.map(s => ({label:s, value:DB.assignments.filter(a => a.status === s).length})))
+      : '<p class="sub" style="margin:0">No assignments yet.</p>') + '</div>';
+
+  /* weekly workload */
+  const workload = [1,2,3,4,5].map(d => ({
+    label:DOW[d].slice(0, 3),
+    value:DB.schedule.filter(s => Number(s.day) === d).length + DB.tasks.filter(t => t.due === mondayOfThisWeek(d) && !t.done).length
+  }));
+  h += '<div class="card" style="margin:0"><div class="card-head"><h3>Weekly workload</h3><div class="sub">Class periods plus open tasks per day</div></div>' +
+    barChart(workload, true) + '</div>';
+  h += '</div>';
+
+  /* per class table */
+  h += '<div class="card"><div class="card-head"><h3>Class by class</h3></div>';
+  h += DB.classes.length ? '<div class="table-wrap"><table><thead><tr><th>Class</th><th>Students</th><th>Assignments</th><th>Average</th><th>Attendance</th></tr></thead><tbody>' +
+    DB.classes.map(c => '<tr><td><b>' + esc(c.name) + '</b> <span class="sub">' + esc(c.grade) + '</span></td>' +
+      '<td class="num">' + studentsOf(c.id).length + '</td><td class="num">' + DB.assignments.filter(a => a.classId === c.id).length + '</td>' +
+      '<td class="pct">' + (classAvg(c.id) != null ? classAvg(c.id) + '%' : '—') + '</td>' +
+      '<td class="pct">' + (classAttendanceRate(c.id) != null ? classAttendanceRate(c.id) + '%' : '—') + '</td></tr>').join('') +
+    '</tbody></table></div>' : '<p class="sub" style="margin:0">No classes yet.</p>';
+  h += '</div>';
+
+  $('#view-reports').innerHTML = h;
+  $('#repPrint').onclick = () => window.print();
+};
+
+/* =========================================================================
+   5m. SETTINGS
+   ========================================================================= */
+RENDERERS.settings = function(){
+  const s = DB.settings;
+  let h = pageHead('Settings', 'Settings', 'Your school year details, appearance and data.');
+
+  if (s.sample){
+    h += '<div class="banner no-print"><span><b>Sample planner loaded.</b> Emily Carter\'s classes are here so you can see how everything works. Clear them whenever you are ready to add your own.</span>' +
+      '<button class="btn sm" id="clearSample">Remove sample data</button></div>';
+  }
+
+  h += '<div class="card"><div class="card-head"><h2>School year setup</h2></div>' +
+    '<div class="row"><div class="field"><label for="setName">Teacher name</label><input id="setName" type="text" value="' + esc(s.teacherName) + '" placeholder="Your name"></div>' +
+    '<div class="field"><label for="setSchool">School name</label><input id="setSchool" type="text" value="' + esc(s.schoolName) + '" placeholder="Your school"></div></div>' +
+    '<div class="row"><div class="field"><label for="setYear">School year</label><input id="setYear" type="text" value="' + esc(s.schoolYear) + '" placeholder="2026–2027"></div>' +
+    '<div class="field"><label for="setGrade">Default grade</label><input id="setGrade" type="text" value="' + esc(s.defaultGrade) + '" placeholder="Grade 5"></div></div>' +
+    '<div class="field"><label for="setSubject">Default subject</label><input id="setSubject" type="text" value="' + esc(s.defaultSubject) + '" placeholder="Math"></div>' +
+    '<button class="btn primary" id="setSave">' + icon('check', 14) + 'Save changes</button></div>';
+
+  h += '<div class="card"><div class="card-head"><h2>Appearance</h2></div>' +
+    '<div class="list-line"><div><div class="ll-t">Theme</div><div class="ll-m">Warm ivory by default. Dark keeps the same olive and cream palette.</div></div>' +
+    '<div class="seg"><button data-theme-set="light"' + (s.theme !== 'dark' ? ' class="on"' : '') + '>Light</button><button data-theme-set="dark"' + (s.theme === 'dark' ? ' class="on"' : '') + '>Dark</button></div></div></div>';
+
+  h += '<div class="card"><div class="card-head"><h2>Your data</h2></div>' +
+    '<p class="sub" style="margin:0 0 16px">Everything lives in this browser only — nothing is uploaded anywhere. Export a copy before switching computers or clearing your browser.</p>' +
+    '<div class="list-line"><div><div class="ll-t">Export my planner</div><div class="ll-m">Downloads one JSON file with every class, lesson, grade and note.</div></div>' +
+    '<button class="btn" id="doExport">' + icon('download', 14) + 'Export</button></div>' +
+    '<div class="list-line"><div><div class="ll-t">Import planner</div><div class="ll-m">Loads a file you exported earlier. This replaces what is here now.</div></div>' +
+    '<button class="btn" id="doImport">' + icon('upload', 14) + 'Import</button></div>' +
+    '<div class="list-line"><div><div class="ll-t">Clear all data</div><div class="ll-m">Erases everything in this browser and starts a blank planner.</div></div>' +
+    '<button class="btn danger" id="doClear">' + icon('trash', 14) + 'Clear</button></div>' +
+    '<input type="file" id="importFile" accept="application/json,.json" style="display:none"></div>';
+
+  h += '<div class="card"><div class="card-head"><h2>About</h2></div>' +
+    '<p class="sub" style="margin:0">TeacherFlow Pro · Plan less. Teach better. A standalone planner that runs entirely in your browser — no account, no subscription, no internet needed after the first load.</p></div>';
+
+  $('#view-settings').innerHTML = h;
+
+  $('#setSave').onclick = () => {
+    s.teacherName = $('#setName').value.trim();
+    s.schoolName = $('#setSchool').value.trim();
+    s.schoolYear = $('#setYear').value.trim();
+    s.defaultGrade = $('#setGrade').value.trim();
+    s.defaultSubject = $('#setSubject').value.trim();
+    save(); paintWho(); toast('Changes saved.');
+  };
+  $$('[data-theme-set]').forEach(b => b.onclick = () => setTheme(b.dataset.themeSet, true));
+  $('#doExport').onclick = exportData;
+  $('#doImport').onclick = () => $('#importFile').click();
+  $('#importFile').onchange = importData;
+  $('#doClear').onclick = () => confirmAction('Clear all data?',
+    'This permanently deletes every class, student, lesson, grade and note stored in this browser. Export a copy first if you might want it back.',
+    'Clear everything', () => {
+      DB = blank();
+      DB.settings.theme = document.documentElement.dataset.theme;
+      save(); paintWho(); toast('Planner cleared.'); go('dashboard');
+    });
+  if ($('#clearSample')) $('#clearSample').onclick = () => confirmAction('Remove sample data?',
+    'This deletes Emily Carter\'s demo classes, students, lessons and grades. Anything you added yourself stays.',
+    'Remove samples', removeSamples);
+};
+function removeSamples(){
+  ['classes','students','schedule','lessons','assignments','events','tasks','goals','resources','notes'].forEach(k => {
+    DB[k] = DB[k].filter(x => !x.sample);
+  });
+  Object.keys(DB.grades).forEach(k => { if (!byId(DB.assignments, k)) delete DB.grades[k]; });
+  Object.keys(DB.attendance).forEach(k => { if (!classOf(k.split('|')[0])) delete DB.attendance[k]; });
+  if (DB.settings.teacherName === 'Emily Carter'){ DB.settings.teacherName = ''; DB.settings.schoolName = ''; }
+  DB.settings.sample = false;
+  UI.classId = null; UI.gradeClass = null; UI.attClass = null;
+  save(); paintWho(); toast('Sample data removed.'); RENDERERS.settings();
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'teacherflow-planner-' + TODAY() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Planner exported.');
+}
+function importData(e){
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data !== 'object' || !data.settings) throw new Error('bad file');
+      confirmAction('Replace your planner?', 'Importing overwrites everything currently in this browser.', 'Import', () => {
+        DB = Object.assign(blank(), data);
+        save(); paintWho(); setTheme(DB.settings.theme || 'light');
+        toast('Planner imported.'); go('dashboard');
+      });
+    } catch(err){
+      toast('That file could not be read. Use a file exported from TeacherFlow Pro.');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+/* =========================================================================
+   6. GLOBAL SEARCH
+   ========================================================================= */
+function runSearch(q){
+  q = q.toLowerCase().trim();
+  if (!q) return;
+  const groups = [
+    {name:'Lessons', items:DB.lessons.filter(l => (l.title + ' ' + l.unit + ' ' + l.objective).toLowerCase().includes(q))
+      .map(l => ({t:l.title, s:[l.subject, l.unit].filter(Boolean).join(' · '), go:() => openLesson(l.id)}))},
+    {name:'Assignments', items:DB.assignments.filter(a => (a.name + ' ' + a.description).toLowerCase().includes(q))
+      .map(a => ({t:a.name, s:className(a.classId) + ' · due ' + relative(a.due), go:() => { go('assignments'); assignmentForm(a.id); }}))},
+    {name:'Students', items:DB.students.filter(s => (fullName(s) + ' ' + s.sid + ' ' + s.email + ' ' + s.notes).toLowerCase().includes(q))
+      .map(s => ({t:fullName(s), s:className(s.classId), go:() => { UI.classId = s.classId; go('classes'); studentProfile(s.id); }}))},
+    {name:'Notes', items:DB.notes.filter(n => (n.title + ' ' + n.content).toLowerCase().includes(q))
+      .map(n => ({t:n.title, s:n.category + ' · ' + fmtDate(n.date), go:() => { go('notes'); noteForm(n.id); }}))},
+    {name:'Resources', items:DB.resources.filter(r => (r.title + ' ' + r.description + ' ' + r.tags).toLowerCase().includes(q))
+      .map(r => ({t:r.title, s:r.category, go:() => { go('resources'); resourceForm(r.id); }}))},
+    {name:'Classes', items:DB.classes.filter(c => (c.name + ' ' + c.subject + ' ' + c.grade).toLowerCase().includes(q))
+      .map(c => ({t:c.name + ' — ' + c.grade, s:c.subject + (c.room ? ' · Room ' + c.room : ''), go:() => { UI.classId = c.id; go('classes'); }}))}
+  ].filter(g => g.items.length);
+
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
+  let body = total ? groups.map((g, gi) => '<div class="results-group"><h4>' + g.name + ' · ' + g.items.length + '</h4>' +
+      g.items.slice(0, 6).map((it, i) => '<div class="result" data-res="' + gi + '|' + i + '"><b>' + esc(it.t) + '</b><span>' + esc(it.s) + '</span></div>').join('') + '</div>').join('')
+    : '<p class="sub" style="margin:0">Nothing matched “' + esc(q) + '”. Try a student name, a lesson title or a tag.</p>';
+
+  openModal('Search results', body, '<button class="btn" id="srClose">Close</button>');
+  $('#srClose').onclick = closeModal;
+  $$('[data-res]').forEach(node => node.onclick = () => {
+    const [gi, i] = node.dataset.res.split('|').map(Number);
+    closeModal();
+    groups[gi].items[i].go();
+  });
+}
+
+/* =========================================================================
+   7. THEME, CHROME, BOOT
+   ========================================================================= */
+function setTheme(mode, announce){
+  document.documentElement.dataset.theme = mode;
+  DB.settings.theme = mode;
+  save();
+  $('#themeToggle').innerHTML = icon(mode === 'dark' ? 'sun' : 'moon', 16);
+  if (announce){ toast(mode === 'dark' ? 'Dark theme on.' : 'Light theme on.'); if (UI.view === 'settings') RENDERERS.settings(); }
+}
+function paintWho(){
+  $('#whoName').textContent = DB.settings.teacherName || 'Your planner';
+  $('#whoSchool').textContent = [DB.settings.schoolName, DB.settings.schoolYear].filter(Boolean).join(' · ') || 'Add your school in Settings';
+}
+function boot(){
+  load();
+  buildNav();
+  paintWho();
+  setTheme(DB.settings.theme === 'dark' ? 'dark' : 'light');
+  RENDERERS.dashboard();
+
+  /* chrome wiring */
+  $('#menuBtn').onclick = () => { $('#sidebar').classList.add('open'); $('#scrim').classList.add('show'); };
+  $('#scrim').onclick = closeSidebar;
+  $('#menuSearch').onclick = () => { $('#sidebar').classList.add('open'); $('#scrim').classList.add('show'); setTimeout(() => $('#globalSearch').focus(), 200); };
+  $('#themeToggle').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark', true);
+  $('#modalX').onclick = closeModal;
+  $('#modalBg').onclick = e => { if (e.target === $('#modalBg')) closeModal(); };
+  $('#globalSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter'){ runSearch(e.target.value); e.target.value = ''; closeSidebar(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && $('#modalBg').classList.contains('show')) closeModal();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k'){ e.preventDefault(); $('#sidebar').classList.add('open'); $('#globalSearch').focus(); }
+  });
+}
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
